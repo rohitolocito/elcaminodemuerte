@@ -3,7 +3,7 @@ package datastructures;
 import java.util.EmptyStackException;
 import java.util.Vector;
 
-public class MyStack<E> extends Vector<E> {
+public class MyStack<E> extends Vector<E> implements MyStackInterface<E> {
 	
 	public synchronized E push(E item) {
 		add(item);
