@@ -1,9 +1,9 @@
 package datastructures;
 
-public class Node<K> {
+public class MyNode<K> {
 	public K val;
-	public Node next;
-	public Node(K val) {
+	public MyNode next;
+	public MyNode(K val) {
 		this.val = val;
 	}
 	
@@ -11,16 +11,16 @@ public class Node<K> {
 		return this.val;
 	}
 	
-	public Node next() {
+	public MyNode next() {
 		return this.next;
 	}
 	
-	public void setNext(Node next) {
+	public void setNext(MyNode next) {
 		this.next = next;
 	}
 	
 	public int len() {
-		Node curr = this;
+		MyNode curr = this;
 		int len = 0;
 		while(curr != null) {
 			len++;
@@ -31,7 +31,7 @@ public class Node<K> {
 	
 	@Override
 	public String toString() {
-		Node curr = this;
+		MyNode curr = this;
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 		while(curr != null) {

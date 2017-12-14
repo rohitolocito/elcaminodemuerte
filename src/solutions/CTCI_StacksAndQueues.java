@@ -2,11 +2,109 @@ package solutions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.EmptyStackException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 import datastructures.MyStackAsLinkedList;
+
+class Animal {
+	
+}
+
+class Dog extends Animal {
+	
+}
+
+class Cat extends Animal {
+	
+}
+
+class AnimalShelter {
+	
+	private class AnimalTimestamp {
+		Animal animal;
+		Date date;
+		
+		public AnimalTimestamp(Animal animal) {
+			this.animal = animal;
+			this.date = new Date();
+		}
+	}
+	
+	private Queue<AnimalTimestamp> dogs, cats;
+	
+	public AnimalShelter() {
+		dogs = new LinkedList<>();
+		cats = new LinkedList<>();
+	}
+	
+	public void addAnimal(Animal animal) {
+		AnimalTimestamp animalEntry = new AnimalTimestamp(animal);
+		if (isDog(animal)) {
+			dogs.add(animalEntry);
+		}
+		else if (isCat(animal)) {
+			cats.add(animalEntry);
+		}
+		else 
+			throw new RuntimeException("We only accepts cats & dogs !");
+	}
+	
+	public Animal takeHome() {
+		if (size() == 0)
+			throw new RuntimeException("No animal found");
+		
+		if (dogs.isEmpty()) {
+			return cats.remove().animal;
+		}
+		
+		if (cats.isEmpty()) {
+			return dogs.remove().animal;
+		}
+		
+		AnimalTimestamp dog = dogs.peek();
+		AnimalTimestamp cat = cats.peek();
+		
+		if (dog.date.before(cat.date)) {
+			return dogs.poll().animal;
+		} else {
+			return cats.poll().animal;
+		}
+	}
+	
+	public Animal takeHomeDog() {
+		if (dogs.isEmpty()) 
+			throw new RuntimeException("No Dogs found");
+		
+		return dogs.poll().animal;
+	}
+	
+	public Animal takeHomeCat() {
+		if (cats.isEmpty()) 
+			throw new RuntimeException("No Dogs found");
+		
+		return cats.poll().animal;
+	}
+	
+	public int size() {
+		return dogs.size() + cats.size();
+	}
+	
+	public boolean isDog(Animal animal) {
+		return animal instanceof Dog;
+	}
+	
+	public boolean isCat(Animal animal) {
+		return animal instanceof Cat;
+	}
+	
+	
+	
+}
 
 
 class SetOfStacks<E> {
@@ -191,8 +289,49 @@ class ThreeStacks<E> {
 }
 
 public class CTCI_StacksAndQueues {
+	
+	// using two stacks
+		private static class MyQueue<E> {
+			
+			Stack<E> stack1, stack2;
+			
+			public MyQueue() {
+				this.stack1 = new Stack<>();
+				this.stack2 = new Stack<>();
+			}
+			
+			public E add(E item) {
+				this.stack1.add(item);
+				return item;
+			}
+			
+			public E remove() {
+				if (isEmpty()) 
+					throw new RuntimeException();
+				
+				if (!this.stack2.isEmpty())
+					return this.stack2.pop();
+				
+				while(!this.stack1.isEmpty()) {
+					this.stack2.push(this.stack1.pop());
+				}
+				
+				return this.stack2.pop();
+			}
+			
+			public boolean isEmpty() {
+				return size() == 0;
+			}
+			
+			public int size() {
+				return this.stack1.size() + this.stack2.size();
+			}
+		}
+		
 
 	public static void main(String[] args) {
+		
+		CTCI_StacksAndQueues run = new CTCI_StacksAndQueues();
 		
 		ThreeStacks<Integer> threeStacks = new ThreeStacks(8);
 		
@@ -241,6 +380,40 @@ public class CTCI_StacksAndQueues {
 		System.out.println(set.pop(2));
 		
 		System.out.println(set);
+		
+		MyQueue<Integer> queue = new MyQueue<>();
+		queue.add(1);
+		queue.add(2);
+		queue.add(3);
+		queue.add(4);
+		System.out.println(queue);
+		System.out.println(queue.remove());
+		
+		Stack<Integer> toBeSorted = new Stack<>();
+		toBeSorted.push(4);
+		toBeSorted.push(3);
+		toBeSorted.push(6);
+		toBeSorted.push(2);
+		toBeSorted.push(5);
+		
+		run.sortStack(toBeSorted);
+		System.out.println(toBeSorted);
+	}
+	
+	public void sortStack(Stack<Integer> stack) {
+		Stack<Integer> temp = new Stack<>();
+		
+		while (!stack.isEmpty()) {
+			Integer item = stack.pop();
+			while (!temp.isEmpty() && temp.peek() > item) {
+				stack.push(temp.pop());
+			}
+			temp.push(item);
+		}
+		
+		while (!temp.isEmpty()) {
+			stack.push(temp.pop());
+		}
 	}
 	
 	

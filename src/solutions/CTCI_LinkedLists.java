@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-import datastructures.Node;
+import datastructures.MyNode;
 
 public class CTCI_LinkedLists {
 	
@@ -12,23 +12,23 @@ public class CTCI_LinkedLists {
 		
 		CTCI_LinkedLists run = new CTCI_LinkedLists();
 		
-		Node<Integer> list = new Node<Integer>(2);
-		list.next = new Node<Integer>(2);
-		list.next.next = new Node<Integer>(2);
-		list.next.next.next = new Node<Integer>(3);
-		list.next.next.next.next = new Node<Integer>(1);
-		list.next.next.next.next.next = new Node<Integer>(13);
+		MyNode<Integer> list = new MyNode<Integer>(2);
+		list.next = new MyNode<Integer>(2);
+		list.next.next = new MyNode<Integer>(2);
+		list.next.next.next = new MyNode<Integer>(3);
+		list.next.next.next.next = new MyNode<Integer>(1);
+		list.next.next.next.next.next = new MyNode<Integer>(13);
 		run.removeDuplicatesNoExtraSpace(list);
 		
 		System.out.println(list);
 		
-		Node<Integer> node = new Node<Integer>(7);
-		node.next = new Node<Integer>(6);
-		node.next.next = new Node<Integer>(5);
-		node.next.next.next = new Node<Integer>(4);
-		node.next.next.next.next = new Node<Integer>(3);
-		node.next.next.next.next.next = new Node<Integer>(2);
-		node.next.next.next.next.next.next = new Node<Integer>(1);
+		MyNode<Integer> node = new MyNode<Integer>(7);
+		node.next = new MyNode<Integer>(6);
+		node.next.next = new MyNode<Integer>(5);
+		node.next.next.next = new MyNode<Integer>(4);
+		node.next.next.next.next = new MyNode<Integer>(3);
+		node.next.next.next.next.next = new MyNode<Integer>(2);
+		node.next.next.next.next.next.next = new MyNode<Integer>(1);
 		
 		System.out.println(run.kthToLast(node, 3).getVal());
 		System.out.println(run.kthToLast(node, 7).getVal());
@@ -42,58 +42,58 @@ public class CTCI_LinkedLists {
 		System.out.println(run.kthToLastEfficient(node, 7).getVal());
 		System.out.println(run.kthToLastEfficient(node, 8));
 		
-		Node<Integer> list1 = new Node<Integer>(1);
-		list1.next = new Node<Integer>(2);
-		list1.next.next = new Node<Integer>(3);
-		list1.next.next.next = new Node<Integer>(4);
-		list1.next.next.next.next = new Node<Integer>(5);
+		MyNode<Integer> list1 = new MyNode<Integer>(1);
+		list1.next = new MyNode<Integer>(2);
+		list1.next.next = new MyNode<Integer>(3);
+		list1.next.next.next = new MyNode<Integer>(4);
+		list1.next.next.next.next = new MyNode<Integer>(5);
 		
 		run.deleteNode(list1.next);
 		System.out.println(list1);
 		
-		Node<Integer> partitionList = new Node<Integer>(3);
-		partitionList.next = new Node<Integer>(5);
-		partitionList.next.next = new Node<Integer>(8);
-		partitionList.next.next.next = new Node<Integer>(5);
-		partitionList.next.next.next.next = new Node<Integer>(10);
-		partitionList.next.next.next.next.next = new Node<Integer>(2);
-		partitionList.next.next.next.next.next.next = new Node<Integer>(1);
-		partitionList.next.next.next.next.next.next.next = new Node<Integer>(4);
+		MyNode<Integer> partitionList = new MyNode<Integer>(3);
+		partitionList.next = new MyNode<Integer>(5);
+		partitionList.next.next = new MyNode<Integer>(8);
+		partitionList.next.next.next = new MyNode<Integer>(5);
+		partitionList.next.next.next.next = new MyNode<Integer>(10);
+		partitionList.next.next.next.next.next = new MyNode<Integer>(2);
+		partitionList.next.next.next.next.next.next = new MyNode<Integer>(1);
+		partitionList.next.next.next.next.next.next.next = new MyNode<Integer>(4);
 		
-		Node<Integer> partitionRes = run.partition(partitionList, 5);
+		MyNode<Integer> partitionRes = run.partition(partitionList, 5);
 		System.out.println(partitionRes);
 		
-		Node<Integer> node1 = new Node<Integer>(7);
-		node1.next = new Node<Integer>(1);
-		node1.next.next = new Node<Integer>(6);
+		MyNode<Integer> node1 = new MyNode<Integer>(7);
+		node1.next = new MyNode<Integer>(1);
+		node1.next.next = new MyNode<Integer>(6);
 
-		Node<Integer> node2 = new Node<Integer>(5);
-		node2.next = new Node<Integer>(9);
-		node2.next.next = new Node<Integer>(2);
+		MyNode<Integer> node2 = new MyNode<Integer>(5);
+		node2.next = new MyNode<Integer>(9);
+		node2.next.next = new MyNode<Integer>(2);
 		
-		Node<Integer> sum = run.sumReversedLists(node1, node2);
+		MyNode<Integer> sum = run.sumReversedLists(node1, node2);
 		System.out.println(sum);
 		
 		
 		// 7 1 6 
 		// 5 9 2
-		Node<Integer> sumFor = run.sumForwardLists(node1, node2);
+		MyNode<Integer> sumFor = run.sumForwardLists(node1, node2);
 		System.out.println(sumFor);
 		
-		Node<Integer> rev = new Node<Integer>(1);
-		rev.next = new Node<Integer>(2);
-		rev.next.next = new Node<Integer>(3);
-		rev.next.next.next = new Node<Integer>(4);
-		rev.next.next.next.next = new Node<Integer>(5);
+		MyNode<Integer> rev = new MyNode<Integer>(1);
+		rev.next = new MyNode<Integer>(2);
+		rev.next.next = new MyNode<Integer>(3);
+		rev.next.next.next = new MyNode<Integer>(4);
+		rev.next.next.next.next = new MyNode<Integer>(5);
 		System.out.println(rev = run.reverseIterative(rev));
 		
 		System.out.println(rev = run.reverseRecursive(rev));
 		
-		Node<Integer> palin = new Node<Integer>(1);
-		palin.next = new Node<Integer>(2);
-		palin.next.next = new Node<Integer>(2);
-		palin.next.next.next = new Node<Integer>(2);
-		palin.next.next.next.next = new Node<Integer>(1);
+		MyNode<Integer> palin = new MyNode<Integer>(1);
+		palin.next = new MyNode<Integer>(2);
+		palin.next.next = new MyNode<Integer>(2);
+		palin.next.next.next = new MyNode<Integer>(2);
+		palin.next.next.next.next = new MyNode<Integer>(1);
 		
 		System.out.println(run.areSameValues(palin, run.reverseAndClone(palin)));
 		
@@ -101,41 +101,41 @@ public class CTCI_LinkedLists {
 		
 		System.out.println(run.isPalindromeIterative(palin));
 		
-		Node<Integer> n1 = new Node<Integer>(3);
-		n1.next = new Node<Integer>(1);
-		n1.next.next = new Node<Integer>(5);
-		n1.next.next.next = new Node<Integer>(9);
-		n1.next.next.next.next = new Node<Integer>(7);
-		n1.next.next.next.next.next = new Node<Integer>(2);
-		n1.next.next.next.next.next.next = new Node<Integer>(1);
+		MyNode<Integer> n1 = new MyNode<Integer>(3);
+		n1.next = new MyNode<Integer>(1);
+		n1.next.next = new MyNode<Integer>(5);
+		n1.next.next.next = new MyNode<Integer>(9);
+		n1.next.next.next.next = new MyNode<Integer>(7);
+		n1.next.next.next.next.next = new MyNode<Integer>(2);
+		n1.next.next.next.next.next.next = new MyNode<Integer>(1);
 		
-		Node<Integer> n2 = new Node<Integer>(4);
-		n2.next = new Node<Integer>(6);
+		MyNode<Integer> n2 = new MyNode<Integer>(4);
+		n2.next = new MyNode<Integer>(6);
 		n2.next.next = n1.next.next.next.next;
 		
 		System.out.println(run.intersection(n1, n2));
 		System.out.println(run.intersectionExtraSpace(n1, n2));
 		
-		Node<Integer> loop = new Node<Integer>(1);
-		loop.next = new Node<Integer>(2);
-		loop.next.next = new Node<Integer>(3);
-		loop.next.next.next = new Node<Integer>(4);
-		loop.next.next.next.next = new Node<Integer>(5);
-		loop.next.next.next.next.next = new Node<Integer>(6);
-		loop.next.next.next.next.next.next = new Node<Integer>(7);
-		loop.next.next.next.next.next.next.next = new Node<Integer>(8);
-		loop.next.next.next.next.next.next.next.next = new Node<Integer>(9);
-		loop.next.next.next.next.next.next.next.next.next = new Node<Integer>(10);
+		MyNode<Integer> loop = new MyNode<Integer>(1);
+		loop.next = new MyNode<Integer>(2);
+		loop.next.next = new MyNode<Integer>(3);
+		loop.next.next.next = new MyNode<Integer>(4);
+		loop.next.next.next.next = new MyNode<Integer>(5);
+		loop.next.next.next.next.next = new MyNode<Integer>(6);
+		loop.next.next.next.next.next.next = new MyNode<Integer>(7);
+		loop.next.next.next.next.next.next.next = new MyNode<Integer>(8);
+		loop.next.next.next.next.next.next.next.next = new MyNode<Integer>(9);
+		loop.next.next.next.next.next.next.next.next.next = new MyNode<Integer>(10);
 		loop.next.next.next.next.next.next.next.next.next.next = loop.next.next.next.next.next;
 		
 		System.out.println(run.loopNode(loop).val);
 	}
 	
-	public Node<Integer> loopNode(Node<Integer> node) {
+	public MyNode<Integer> loopNode(MyNode<Integer> node) {
 		if (node == null)
 			return null;
 		
-		Node<Integer> slow = node, fast = node;
+		MyNode<Integer> slow = node, fast = node;
 		int k = 0;
 		while (fast != null) {
 			k++;
@@ -164,11 +164,11 @@ public class CTCI_LinkedLists {
 		
 	}
 	
-	public Node<Integer> intersectionExtraSpace(Node<Integer> node1, Node<Integer> node2) {
+	public MyNode<Integer> intersectionExtraSpace(MyNode<Integer> node1, MyNode<Integer> node2) {
 		if (node1 == null || node2 == null)
 			return null;
 		
-		Set<Node> set = new HashSet<>();
+		Set<MyNode> set = new HashSet<>();
 		while(node1 != null) {
 			set.add(node1);
 			node1 = node1.next;
@@ -185,9 +185,9 @@ public class CTCI_LinkedLists {
 	}
 	
 	private class LastNodeLen {
-		Node<Integer> lastNode;
+		MyNode<Integer> lastNode;
 		int len;
-		public LastNodeLen(Node<Integer> node) {
+		public LastNodeLen(MyNode<Integer> node) {
 			this.len = node.len();
 			while(node != null && node.next != null)
 				node = node.next;
@@ -195,7 +195,7 @@ public class CTCI_LinkedLists {
 		}
 	}
 	
-	public Node<Integer> intersection(Node<Integer> node1, Node<Integer> node2) {
+	public MyNode<Integer> intersection(MyNode<Integer> node1, MyNode<Integer> node2) {
 		LastNodeLen lastNode1 = new LastNodeLen(node1);
 		LastNodeLen lastNode2 = new LastNodeLen(node2);
 		
@@ -205,7 +205,7 @@ public class CTCI_LinkedLists {
 		int len1 = lastNode1.len;
 		int len2 = lastNode2.len;
 		
-		Node<Integer> longer = null, shorter = null;
+		MyNode<Integer> longer = null, shorter = null;
 		
 		if (len1 > len2) {
 			longer = node1;
@@ -227,7 +227,7 @@ public class CTCI_LinkedLists {
 		return null;
 	}
 	
-	private Node<Integer> moveKSteps(Node<Integer> node, int k) {
+	private MyNode<Integer> moveKSteps(MyNode<Integer> node, int k) {
 		if (node == null || k <= 0)
 			return node;
 		
@@ -241,11 +241,11 @@ public class CTCI_LinkedLists {
 		return node;
 	}
 	
-	public boolean isPalindromeIterative(Node<Integer> node) {
-		Stack<Node> stack = new Stack<>();
+	public boolean isPalindromeIterative(MyNode<Integer> node) {
+		Stack<MyNode> stack = new Stack<>();
 		
-		Node<Integer> fast = node;
-		Node<Integer> slow = node;
+		MyNode<Integer> fast = node;
+		MyNode<Integer> slow = node;
 		
 		while (fast != null && fast.next != null) {
 			fast = fast.next;
@@ -258,7 +258,7 @@ public class CTCI_LinkedLists {
 			slow = slow.next;
 		
 		while (slow != null) {
-			Node<Integer> n = stack.pop();
+			MyNode<Integer> n = stack.pop();
 			if (n.val != slow.val)
 				return false;
 			slow = slow.next;
@@ -268,7 +268,7 @@ public class CTCI_LinkedLists {
 	}
 	
 	
-	private boolean areSameValues(Node<Integer> node1, Node<Integer> node2) {
+	private boolean areSameValues(MyNode<Integer> node1, MyNode<Integer> node2) {
 		while(node1 != null && node2 != null) {
 			if (node1.val != node2.val) 
 				return false;
@@ -282,16 +282,16 @@ public class CTCI_LinkedLists {
 	
 	private class Result {
 		boolean isPalindrome; 
-		Node<Integer> node;
+		MyNode<Integer> node;
 		
-		public Result(boolean isPalindrome, Node<Integer> node) {
+		public Result(boolean isPalindrome, MyNode<Integer> node) {
 			this.isPalindrome = isPalindrome;
 			this.node = node;
 		}
 	}
 	
 	
-	public boolean isPalindrome(Node<Integer> node) {
+	public boolean isPalindrome(MyNode<Integer> node) {
 		if(node == null)
 			return false;
 		
@@ -300,7 +300,7 @@ public class CTCI_LinkedLists {
 		return isPalindrome(node, len).isPalindrome;
 	}
 	
-	private Result isPalindrome(Node<Integer> node, int len) {
+	private Result isPalindrome(MyNode<Integer> node, int len) {
 		if(len == 1)
 			return new Result(true, node.next);
 		
@@ -316,11 +316,11 @@ public class CTCI_LinkedLists {
 		}
 	}
 	
-	public Node<Integer> reverseAndClone(Node<Integer> node) {
-		Node<Integer> head = null;
+	public MyNode<Integer> reverseAndClone(MyNode<Integer> node) {
+		MyNode<Integer> head = null;
 		
 		while(node != null) {
-			Node<Integer> rev = new Node<Integer>(node.val);
+			MyNode<Integer> rev = new MyNode<Integer>(node.val);
 			rev.next = head;
 			head = rev;
 			node = node.next;
@@ -329,12 +329,12 @@ public class CTCI_LinkedLists {
 		return head;
 	}
 	
-	public Node<Integer> reverseRecursive(Node<Integer> node) {
+	public MyNode<Integer> reverseRecursive(MyNode<Integer> node) {
 		if (node == null || node.next == null) 
 			return node;
 		
-		Node next = node.next;
-		Node head = reverseRecursive(node.next);
+		MyNode next = node.next;
+		MyNode head = reverseRecursive(node.next);
 		
 		if(next != null)
 			next.next = node;
@@ -345,16 +345,16 @@ public class CTCI_LinkedLists {
 	}
 	
 	
-	public Node<Integer> reverseIterative(Node<Integer> node) {
+	public MyNode<Integer> reverseIterative(MyNode<Integer> node) {
 		if(node == null)
 			return node;
 		
-		Node head = node;
-		Node next = node.next;
+		MyNode head = node;
+		MyNode next = node.next;
 		head.next = null;
 		
 		while (next != null) {
-			Node nextNext = next.next;
+			MyNode nextNext = next.next;
 			next.next = head;
 			head = next;
 			next = nextNext;
@@ -367,7 +367,7 @@ public class CTCI_LinkedLists {
 	// 123
 	// 123
 	// 246
-	public Node<Integer> sumForwardLists(Node<Integer> node1, Node<Integer> node2) {
+	public MyNode<Integer> sumForwardLists(MyNode<Integer> node1, MyNode<Integer> node2) {
 		
 		if (node1 == null)
 			return node2;
@@ -379,7 +379,7 @@ public class CTCI_LinkedLists {
 		
 		int len2 = node2.len();
 		
-		Node<Integer> node = null, res = null; 
+		MyNode<Integer> node = null, res = null; 
 		int carry[] = {0};
 		
 		if (len1 > len2) {
@@ -399,19 +399,19 @@ public class CTCI_LinkedLists {
 		if (carry[0] == 0)
 			return res;
 		else {
-			Node<Integer> n = new Node<Integer>(carry[0]);
+			MyNode<Integer> n = new MyNode<Integer>(carry[0]);
 			n.next = res;
 			return n;
 		}
 		
 	}
 	
-	private Node<Integer> padKZeroes(Node<Integer> node, int k) {
+	private MyNode<Integer> padKZeroes(MyNode<Integer> node, int k) {
 		if (k <= 0)
 			return node;
 		
 		while(k > 0) {
-			Node<Integer> zero = new Node<Integer>(0);
+			MyNode<Integer> zero = new MyNode<Integer>(0);
 			zero.next = node;
 			node = zero;
 			k--;
@@ -423,41 +423,41 @@ public class CTCI_LinkedLists {
 	//     1
 	// 1 2 4
 	// assumes same length
-	private Node<Integer> sumForwardLists(Node<Integer> node1, Node<Integer> node2, int[] carry) { 
+	private MyNode<Integer> sumForwardLists(MyNode<Integer> node1, MyNode<Integer> node2, int[] carry) { 
 		
 		if (node1 == null && node2 == null)
 			return null;
 		
-		Node<Integer> next = sumForwardLists(node1.next, node2.next, carry);
+		MyNode<Integer> next = sumForwardLists(node1.next, node2.next, carry);
 		
-		Node<Integer> node = addTwoNodes(node1, node2, carry);
+		MyNode<Integer> node = addTwoNodes(node1, node2, carry);
 		
 		node.next = next;
 		
 		return node;
 	}
 	
-	private Node<Integer> addTwoNodes(Node<Integer> node1, Node<Integer> node2, int[] carry) {
+	private MyNode<Integer> addTwoNodes(MyNode<Integer> node1, MyNode<Integer> node2, int[] carry) {
 		int sum = 0;
 		
 		sum += node1 != null ? node1.val : 0;
 		sum += node2 != null ? node2.val : 0;
 		
 		sum += carry[0];
-		Node<Integer> node = new Node<Integer>(sum % 10);
+		MyNode<Integer> node = new MyNode<Integer>(sum % 10);
 		carry[0] = sum/10;
 		return node;
 		
 	}
 	
-	public Node<Integer> sumReversedLists(Node<Integer> node1, Node<Integer> node2) {
+	public MyNode<Integer> sumReversedLists(MyNode<Integer> node1, MyNode<Integer> node2) {
 		if(node1 == null)
 			return node2;
 		
 		if(node2 == null)
 			return node1;
 		
-		Node<Integer> res = null, resCurr = null;
+		MyNode<Integer> res = null, resCurr = null;
 		int carry = 0;
 		
 		while(node1 != null || node2 != null) {
@@ -471,10 +471,10 @@ public class CTCI_LinkedLists {
 			carry = sum/10;
 			
 			if(res == null) {
-				res = new Node<Integer>(val);
+				res = new MyNode<Integer>(val);
 				resCurr = res;
 			} else {
-				resCurr.next = new Node<Integer>(val);
+				resCurr.next = new MyNode<Integer>(val);
 				resCurr = resCurr.next;
 			}
 			
@@ -483,18 +483,18 @@ public class CTCI_LinkedLists {
 		}
 		
 		if (carry != 0) {
-			resCurr.next = new Node<Integer>(carry);
+			resCurr.next = new MyNode<Integer>(carry);
 		}
 		
 		return res;
 	}
 	
-	public Node<Integer> partitionSmart(Node<Integer> node, int x) {
-		Node<Integer> head = node;
-		Node<Integer> tail = node;
+	public MyNode<Integer> partitionSmart(MyNode<Integer> node, int x) {
+		MyNode<Integer> head = node;
+		MyNode<Integer> tail = node;
 		
 		while(node != null) {
-			Node next = node.next;
+			MyNode next = node.next;
 			
 			if(node.val < x) {
 				node.next = head;
@@ -510,16 +510,16 @@ public class CTCI_LinkedLists {
 		return head;
 	}
 	
-	public Node<Integer> partition(Node<Integer> node, int x) {
+	public MyNode<Integer> partition(MyNode<Integer> node, int x) {
 		if(node == null)
 			return null;
 		
-		Node<Integer> less = null, lessCurr = null;
-		Node<Integer> high = null, highCurr = null;
+		MyNode<Integer> less = null, lessCurr = null;
+		MyNode<Integer> high = null, highCurr = null;
 		
 		while(node != null) {
 			
-			Node next = node.next;
+			MyNode next = node.next;
 			node.next = null;
 			
 			if(node.val < x) {
@@ -542,24 +542,24 @@ public class CTCI_LinkedLists {
 			node = next;
 		}
 		
-		Node<Integer> res = less == null ? high : less;
+		MyNode<Integer> res = less == null ? high : less;
 		if (lessCurr != null)
 			lessCurr.next = high;
 		
 		return res;
 	}
 	
-	public void deleteNode(Node<Integer> node) {
+	public void deleteNode(MyNode<Integer> node) {
 		if(node == null || node.next == null)
 			return;
 		
-		Node next = node.next;
+		MyNode next = node.next;
 		node.val = (Integer) next.val;
 		node.next = next.next;
 	}
 	
-	public Node<Integer> kthToLastEfficient(Node<Integer> node, int k) {
-		Node<Integer> kthNodeFromCurr = node;
+	public MyNode<Integer> kthToLastEfficient(MyNode<Integer> node, int k) {
+		MyNode<Integer> kthNodeFromCurr = node;
 		int diff = k;
 		while(diff != 0) {
 			if(node == null)
@@ -574,16 +574,16 @@ public class CTCI_LinkedLists {
 		return kthNodeFromCurr;
 	}
 	
-	public Node<Integer> kthToLastRecursion(Node<Integer> node, int k) {
+	public MyNode<Integer> kthToLastRecursion(MyNode<Integer> node, int k) {
 		int[] countFromLast = {k};
 		return kthToLast(node, countFromLast);
 	}
 	
-	private Node<Integer> kthToLast(Node<Integer> node, int[] countFromLast) {
+	private MyNode<Integer> kthToLast(MyNode<Integer> node, int[] countFromLast) {
 		if(node == null)
 			return null;
 		
-		Node last = kthToLast(node.next, countFromLast);
+		MyNode last = kthToLast(node.next, countFromLast);
 		if(countFromLast[0] == 1) {
 			countFromLast[0]--;
 			return node;
@@ -593,7 +593,7 @@ public class CTCI_LinkedLists {
 		}
 	}
 	
-	public Node<Integer> kthToLast(Node<Integer> node, int k) {
+	public MyNode<Integer> kthToLast(MyNode<Integer> node, int k) {
 		if (k <= 0)
 			return null;
 		
@@ -607,10 +607,10 @@ public class CTCI_LinkedLists {
 		
 	}
 	
-	public void removeDuplicatesNoExtraSpace(Node<Integer> node) {
+	public void removeDuplicatesNoExtraSpace(MyNode<Integer> node) {
 		while(node != null) {
-			Node prev = node;
-			Node next = node.next;
+			MyNode prev = node;
+			MyNode next = node.next;
 			while(next != null) {
 				if(next.val == node.val) {
 					prev.next = next.next;
@@ -623,10 +623,10 @@ public class CTCI_LinkedLists {
 		}
 	}
 	
-	public void removeDuplicates(Node<Integer> node) {
+	public void removeDuplicates(MyNode<Integer> node) {
 		
 		Set<Integer> set = new HashSet<>();
-		Node prev = null;
+		MyNode prev = null;
 		while(node != null) {
 			if(set.contains(node.getVal())) {
 				prev.setNext(node.next());
