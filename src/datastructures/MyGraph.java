@@ -1,20 +1,33 @@
 package datastructures;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
+import java.util.stream.Collectors;
+
+enum State {
+	BLANK,
+	PARTIAL,
+	VISITED
+}
 
 public class MyGraph<E> {
 	
 	private class Node {
 		E name;
-		Set<Node> edges;
+		Set<Node> edges; // outgoing edges
+		Set<Node> incomingEdges;
 		
 		public Node(E name) {
 			this.edges = new HashSet<>();
+			this.incomingEdges = new HashSet<>();
 			this.name = name;
 		}
 		
@@ -22,12 +35,29 @@ public class MyGraph<E> {
 			this.edges.add(edge);
 		}
 		
+		void addIncomingEdge(Node edge) {
+			this.incomingEdges.add(edge);
+		}
+		
 		boolean hasEdge(Node edge) {
 			return this.edges.contains(edge);
 		}
 		
+		boolean hasIncomingEdge(Node edge) {
+			return this.incomingEdges.contains(edge);
+		}
+		
 		Set<Node> getEdges() {
 			return this.edges;
+		}
+		
+		Set<Node> getIncomingEdges() {
+			return this.incomingEdges;
+		}
+		
+		@Override
+		public String toString() {
+			return name.toString();
 		}
 	}
 	
@@ -54,6 +84,7 @@ public class MyGraph<E> {
 		}
 		
 		this.graph.get(from).addEdge(this.graph.get(to));
+		this.graph.get(to).addIncomingEdge(this.graph.get(from));
 		if (isBidirectional) 
 			this.graph.get(to).addEdge(this.graph.get(from));
 	}
@@ -94,5 +125,70 @@ public class MyGraph<E> {
 			}
 		}
 		return false;
+	}
+	// topological sort
+	public List<E> buildOrderUsingDFS() {
+		MyStack<E> stack = new MyStack<>();
+		Map<Node, State> map = new HashMap<>();
+		for (Node node : this.graph.values()) {
+			if (!map.getOrDefault(node, State.BLANK).equals(State.VISITED)) {
+				buildOrderUsingDFS(node, stack, map);
+			}
+		}
+		
+		List<E> result = new ArrayList<>();
+		while(!stack.isEmpty()) 
+			result.add(stack.pop());
+		return result;
+	}
+	
+	private void buildOrderUsingDFS(Node root, MyStack<E> stack, Map<Node, State> states) {
+		if (root == null)
+			return;
+		
+		if (states.getOrDefault(root, State.BLANK).equals(State.PARTIAL))
+			throw new RuntimeException("Cannot plan the projects due to cyclic dependency");
+		
+		if (states.getOrDefault(root, State.BLANK).equals(State.VISITED))
+			return;
+		
+		states.put(root, State.PARTIAL);
+		
+		for(Node child: root.edges) {
+			buildOrderUsingDFS(child, stack, states);
+		}
+		
+		states.put(root, State.VISITED);
+		stack.push(root.name);
+	}
+	
+	
+	public List<E> buildOrder() {
+		List<Node> order = new ArrayList<>();
+		Map<Node, Integer> mapDependencyCounts = new HashMap<>();
+		
+		for(Node vertex : this.graph.values()) {
+			if (vertex.incomingEdges.isEmpty()) {
+				order.add(vertex);
+			}
+			mapDependencyCounts.put(vertex, vertex.incomingEdges.size());
+		}
+		
+		// at any point in time order should only have projects that have 0 dependencies
+		int toBeProcessed = 0;
+		while (toBeProcessed < order.size()) {
+			Set<Node> children = order.get(toBeProcessed).edges;
+			for(Node child : children) {
+				mapDependencyCounts.put(child, mapDependencyCounts.get(child)-1);
+				if (mapDependencyCounts.get(child) == 0) {
+					order.add(child);
+				}
+			}
+			toBeProcessed++;
+		}
+		
+		return order.size() != this.graph.size() ? null : order.stream()
+					.map(node -> node.name)
+					.collect(Collectors.toList());
 	}
 }

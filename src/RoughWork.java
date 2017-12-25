@@ -113,7 +113,28 @@ public class RoughWork {
 		
 		Node numbers = interweaveLists(odd, even);
 		System.out.println(numbers);
+		System.out.println(~8 & ((1 << 5) -1));
+		System.out.println("MAX "+Integer.MAX_VALUE);
+		System.out.println("MIN "+Integer.MIN_VALUE);
+		System.out.println("MIN + MAX " +(Integer.MIN_VALUE + Integer.MAX_VALUE));
+		System.out.println("MAX + MAX " +(Integer.MAX_VALUE + Integer.MAX_VALUE));
+		System.out.println("MAX + MAX >>> 1 "+((Integer.MAX_VALUE + Integer.MAX_VALUE) >>> 1));
 		
+		System.out.println("");
+		System.out.println("10000000000000000000000000000000".length());
+		System.out.println("01111111111111111111111111111111".length());
+		System.out.println("01111111111111111111111111111111".length());
+		// min + max = -1 because all ones in signed integers represents -1
+		// take 1
+		// complement it... 
+		// add 1
+		// 2's complement of -1 is all 1s
+		
+		System.out.println(1 << 3);
+		System.out.println(Integer.BYTES+" " + Character.BYTES);
+		
+		int[] what = new int[]{1,2,3};
+		System.out.println(Arrays.toString(what));
 	}
 	
 	public static Node interweaveLists(Node node1, Node node2) {

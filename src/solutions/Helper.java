@@ -37,5 +37,21 @@ public class Helper {
 		}
 		System.out.println("=====================");
 	}
+	
+	public static double[] getRootsQuadratic(int a, int b, int c) {
+		//aX^2 + bX + c
+		double determinant = Math.pow(b, 2) - 4 * a * c;
+		if (determinant > 0) {
+			double root1 = (-b + Math.sqrt(determinant)) / (2 * a);
+			double root2 = (-b - Math.sqrt(determinant)) / (2 * a);
+			double[] roots = {root1, root2};
+			return roots;
+		} else if (determinant == 0) {
+			double root = (-b)/(2 * a);
+			return new double[]{root};
+		} else {
+			return new double[]{};
+		}
+	}
 
 }
