@@ -79,7 +79,7 @@ public class RoughWork {
 		powersOf2(5);
 		RoughWork roughWork = new RoughWork();
 		System.out.println(roughWork.equals(roughWork));
-		printPairs(1000);
+		//printPairs(1000);
 		System.out.println(positions("abbc", "cbabadcbbabbcbabaabccbabc"));
 		System.out.println(permutes("abc"));
 		
@@ -94,11 +94,33 @@ public class RoughWork {
 		
 		SortingAlgorithms<Integer> sort = new SortingAlgorithms<>();
 		Integer[] arr = {12,3,7,1,8,9,22};
-		sort.QuickSort(arr);
-		System.out.println(Arrays.toString(arr));
+		sort.bubbleSort(arr);
+		System.out.println("Bubble Sort => " + Arrays.toString(arr));
 		Integer[] arr1 = {5,3,2,1};
 		sort.QuickSort(arr1);
-		System.out.println(Arrays.toString(arr1));
+		System.out.println("Quick Sort => "+ Arrays.toString(arr1));
+		
+		Integer[] arr2 = {8, -1, 0, 2, 6, 9, 8, 2, 0};
+		sort.selectionSort(arr2);
+		System.out.println("Selection Sort => " +Arrays.toString(arr2));
+		
+		Integer[] arr3 = {8, -1, 0, 2, 6, 9, 8, 2, 0};
+		sort.mergeSort(arr3);
+		System.out.println("Merge Sort => " +Arrays.toString(arr3));
+		
+		Integer[] arr4 = {8, 1, 0, 2, 6, 9, 8, 2, 0};
+		sort.countingSortNonStableVersion(arr4, 10000000);
+		System.out.println("Counting Sort Inefficient => " +Arrays.toString(arr4));
+		
+		Integer[] arr5 = {-8, 1, 0, -2, 6, 9, 8, -2, 0};
+		sort.countingSortEfficient(arr5, 10000000);
+		System.out.println("Counting Sort Efficient => " +Arrays.toString(arr5));
+		
+		Integer[] arr6 = {18, 12, 01, 2, 625, 900, 189, 112, 230};
+		sort.radixSort(arr6);
+		System.out.println("Radix Sort => " +Arrays.toString(arr6));
+		
+		System.out.println();
 		
 		Node odd = new Node(1);
 		odd.next = new Node(3);
