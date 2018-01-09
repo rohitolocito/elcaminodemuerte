@@ -60,4 +60,25 @@ public class MyTrie {
 		
 		return node.isWord ? node.count + node.map.size() :  node.map.size();
 	}
+	
+	public boolean isWord(String s) {
+		TrieNode node = containsString(s);
+		return node != null ? node.isWord : false;
+	}
+	
+	public boolean contains(String s) {
+		return containsString(s) != null;
+	}
+	
+	private TrieNode containsString(String s) {
+		TrieNode node = this.root;
+		
+		for(int i=0; i<s.length(); i++) {
+			node = node.map.getOrDefault(s.charAt(i), null);
+			if (node == null)
+				return node;
+		}
+		
+		return node;
+	}
 }
