@@ -126,6 +126,38 @@ public class MyGraph<E> {
 		}
 		return false;
 	}
+	
+	public Map<E, List<E>> stronglyConnectedComponents() {
+		Map<Node, State> states = new HashMap<>();
+		Map<E, List<E>> connectedComponents = new HashMap<>();
+		for(Node node : this.graph.values()) {
+			List<E> list = new ArrayList<>();
+			if (!states.getOrDefault(node, State.BLANK).equals(State.VISITED)) {
+				stronglyConnectedComponentsUsingDFS(node, states, list);
+				connectedComponents.put(node.name, list);
+			}
+		}
+		return connectedComponents;
+	}
+	
+	private void stronglyConnectedComponentsUsingDFS(Node node, Map<Node, State> states, List<E> list) {
+		if (node == null)
+			return;
+		
+		if (!states.getOrDefault(node, State.BLANK).equals(State.BLANK))
+			return;
+		
+		states.put(node, State.PARTIAL);
+		
+		list.add(node.name);
+		
+		for(Node child : node.edges) {
+			stronglyConnectedComponentsUsingDFS(child, states, list);
+		}
+		
+		states.put(node, State.VISITED);
+	}
+	
 	// topological sort
 	public List<E> buildOrderUsingDFS() {
 		MyStack<E> stack = new MyStack<>();
