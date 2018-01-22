@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import datastructures.MyPriorityQueue;
 import solutions.SortingAlgorithms;
 
 public class RoughWork {
@@ -157,6 +159,33 @@ public class RoughWork {
 		
 		int[] what = new int[]{1,2,3};
 		System.out.println(Arrays.toString(what));
+		
+		// select studentid, studentname , count(*)
+		// from students, studentCourses
+		// where students.studentid == studentCourses.studentid
+		// groupby (studentCourses.studentid);
+		
+		MyPriorityQueue<Integer> queue = new MyPriorityQueue<>(new Comparator<Integer>() {
+
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				if (o1.intValue() >= o2.intValue())
+					return -1;
+				else
+					return 1;
+			}
+		});
+		queue.add(20);
+		queue.add(2);
+		queue.add(12);
+		queue.add(9);
+		queue.add(7);
+		
+		while (!queue.isEmpty()) {
+			System.out.println(queue.poll());
+		}
+		
+		System.out.println(Integer.MAX_VALUE + 292929);
 	}
 	
 	public static Node interweaveLists(Node node1, Node node2) {

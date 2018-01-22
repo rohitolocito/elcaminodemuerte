@@ -1,5 +1,6 @@
 package solutions;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -12,11 +13,71 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
+import java.util.Stack;
 
 import datastructures.MyGraph;
 import datastructures.MyTrie;
 
 public class CTCI_Hard {
+	
+	private static class ContinuousMedian {
+		
+		private PriorityQueue<Integer> minHeap;
+		private PriorityQueue<Integer> maxHeap;
+		
+		public ContinuousMedian() {
+			minHeap = new PriorityQueue<>();
+			maxHeap = new PriorityQueue<>(new Comparator<Integer>() {
+
+				@Override
+				public int compare(Integer o1, Integer o2) {
+					if (o1.intValue() >= o2.intValue())
+						return -1;
+					else
+						return 1;
+				}
+			});
+		}
+		
+		public void add(int n) {
+			
+			if (maxHeap.size() == 0) {
+				maxHeap.add(n);
+				return;
+			}
+			
+			if (maxHeap.size() > minHeap.size()) {
+				if (n > maxHeap.peek()) {
+					minHeap.add(n);
+				} else {
+					minHeap.add(maxHeap.poll());
+					maxHeap.add(n);
+				}
+			} else {
+				if (n > minHeap.peek()) {
+					maxHeap.add(minHeap.poll());
+					minHeap.add(n);
+				} else {
+					maxHeap.add(n);
+				}
+			}
+		}
+		
+		public Integer getMedian() {
+			if (size() == 0)
+				return null;
+			
+			if (size() %2 == 0) {
+				return (minHeap.peek() + maxHeap.peek())/2;
+			} else {
+				return maxHeap.peek();
+			}
+		}
+		
+		public int size() {
+			return minHeap.size() + maxHeap.size();
+		}
+	}
 	
 	private static class BiNode<K> {
 		
@@ -158,6 +219,13 @@ public class CTCI_Hard {
 		dict.add("mother");
 		dict.add("brother");
 		dict.add("look");
+		dict.add("damp");
+		dict.add("limp");
+		//dict.add("lamp");
+		dict.add("lime");
+		dict.add("dame");
+		dict.add("lame");
+		
 		System.out.println(run.getSpacedDocument("jesslookedjustliketimherbrother", 0,dict));
 		
 		int[] arr1 = new int[20];
@@ -180,6 +248,469 @@ public class CTCI_Hard {
 		String T[] = {"is", "ppi", "hi", "sis", "i", "ssippi"};
 		String b = "mississippi";
 		run.multiSearch(b, T);
+		
+		int[] input = {1, 5, 9};
+		int[] seq = {7, 5, 9, 0, 2, 1, 3, 5, 7, 9, 1, 1, 5, 8, 8, 9, 7};
+		
+		System.out.println(Arrays.toString(run.shortestSupersequence(input, seq)));
+		System.out.println(Arrays.toString(run.shortestSupersequence1(input, seq)));
+		System.out.println(run.sum(5) + " " + run.product(5));
+		
+		ContinuousMedian continuousMedian = new ContinuousMedian();
+		
+		for (int s : seq) {
+			continuousMedian.add(s);
+			System.out.print(continuousMedian.getMedian()+" ");
+		}
+		
+		int hist[] = {0, 0, 4, 0, 0, 6, 0, 0, 3, 0, 5, 0, 1, 0, 0, 0};
+		System.out.println("\nvol => " +run.volumeOfHistogram(hist));
+		System.out.println("\nvol => " +run.volumeOfHistogramBetter(hist));
+		
+		int hist1[] = {0, 0, 4, 0, 0, 6, 0, 0, 3, 0, 8, 0, 2, 0, 5, 2, 0, 3, 0, 0};
+		System.out.println("\nvol => " +run.volumeOfHistogram(hist1));
+		System.out.println("\nvol => " +run.volumeOfHistogramBetter(hist1));
+		
+		System.out.println(run.wordTransformer("damp", "lame", dict));
+		
+		
+	}
+	
+	private class RangeSum {
+		int col1;
+		int col2;
+		int sum;
+		
+		public RangeSum(int col1, int col2, int sum) {
+			this.col1 = col1;
+			this.col2 = col2;
+			this.sum = sum;
+		}
+		
+	}
+	
+	
+	public SubmatrixSum submatrixWithLargestSumEfficient(int[][] mat) {
+		
+		SubmatrixSum best = null;
+		
+		for (int row1=0; row1 < mat.length; row1++) {
+			int[] partialSum = new int[mat[0].length];
+			for (int row2=row1; row2 < mat.length; row2++) {
+				for (int col=0; col < mat[0].length; col++) {
+					partialSum[col] += mat[row2][col];
+				}
+				RangeSum rangeSum = maxSubArrRange(partialSum);
+				if (best == null || best.sum < rangeSum.sum) {
+					best = new SubmatrixSum(row1, rangeSum.col1, row2, rangeSum.col2, rangeSum.sum);
+				}
+			}
+		}
+		
+		return best;
+	}
+	
+	private RangeSum maxSubArrRange(int[] arr) {
+		int sum = 0;
+		int maxSum = Integer.MIN_VALUE;
+		int from = -1;
+		
+		RangeSum range = null;
+		
+		for (int i=0; i<arr.length; i++) {
+			if (sum + arr[i] > 0) {
+				sum += arr[i];
+				if (from == -1) {
+					from = i;
+				}
+			} else {
+				if (sum != 0 && sum > maxSum) {
+					maxSum = sum;
+					range = new RangeSum(from, i, maxSum);
+				}
+				from = -1;
+				sum = 0;
+			}
+		}
+		
+		return range;
+	}
+	
+	private class SubmatrixSum {
+		int row1, row2;
+		int col1, col2;
+		int sum;
+		
+		public SubmatrixSum(int row1, int col1, int row2, int col2, int sum) {
+			this.row1 = row1;
+			this.row2 = row2;
+			this.col1 = col1;
+			this.col2 = col2;
+			this.sum = sum;
+		}
+	}
+	
+	// N^4 dynamic programming solution
+	
+	public SubmatrixSum submatrixWithLargestSum(int[][] mat) {
+		
+		int[][] precomputedSums = precomputeSums(mat);
+		
+		SubmatrixSum best = null;
+		
+		for (int row=0; row<mat.length; row++) {
+			for (int col=0; col<mat[0].length; col++) {
+				for (int row1 = row; row1 < mat.length; row1++) {
+					for (int col1 = col; col1 < mat[0].length; col1++) {
+						
+						int sum = getSumSubmatrix(precomputedSums, row, col, row1, col1);
+						
+						if (best == null || best.sum < sum) {
+							best = new SubmatrixSum(row, col, row1, col1, sum);
+						}
+					}
+				}
+			}
+		}
+		
+		return best;
+	}
+	
+	private int getSumSubmatrix(int[][] precomputedSums, int row1, int col1, int row2, int col2) {
+		int topAndLeft = row1 > 0 && col1 > 0 ? precomputedSums[row1-1][col1-1] : 0;
+		int top = row1 > 0 ? precomputedSums[row1-1][col2] : 0;
+		int left = col1 > 0 ? precomputedSums[row2][col1-1] : 0;
+		int full = precomputedSums[row2][col2];
+		return full - top - left + topAndLeft;
+				
+	}
+	
+	private int[][] precomputeSums(int[][] mat) {
+		int[][] sums = new int[mat.length][mat[0].length];
+		
+		for (int i=0; i<mat.length; i++) {
+			for (int j=0; j<mat[0].length; j++) {
+				int left = j > 0 ? sums[i][j-1] : 0;
+				int top = i > 0 ? sums[i-1][j] : 0;
+				int overlap = i > 0 && j > 0 ? sums[i-1][j-1] : 0;
+				sums[i][j] = left + top - overlap + mat[i][j];
+			}
+		}
+		
+		return sums;
+	}
+	
+	private class RowCol {
+		int row;
+		int col;
+		public RowCol(int row, int col) {
+			this.row = row;
+			this.col = col;
+		}
+	}
+	
+	private class SubSquareLoc {
+		
+		RowCol rowCol1;
+		RowCol rowCol2;
+		RowCol rowCol3;
+		RowCol rowCol4;
+		
+		
+	}
+	
+	public SubSquareLoc maxSubsquare(int[][] mat) {
+		for (int size = mat.length; size > 0; size --) {
+			SubSquareLoc loc = maxSubsquare(mat, size);
+			if (loc != null)
+				return loc;
+		}
+		
+		return null;
+	}
+	
+	private SubSquareLoc maxSubsquare(int[][] mat, int size) {
+		int count = mat.length-size+1;
+		for (int row = 0; row < count; row++) {
+			for (int col=0; col < count; col++) {
+				if (isBlackSquare(mat, row, col, size)) {
+					RowCol rowCol1 = new RowCol(row, col);
+					RowCol rowCol2 = new RowCol(row+size-1, col);
+					RowCol rowCol3 = new RowCol(row, col+size-1);
+					RowCol rowCol4 = new RowCol(row+size-1, col+size-1);
+					
+					SubSquareLoc loc = new SubSquareLoc();
+					loc.rowCol1 = rowCol1;
+					loc.rowCol2 = rowCol2;
+					loc.rowCol3 = rowCol3;
+					loc.rowCol4 = rowCol4;
+					return loc;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	private boolean isBlackSquare(int[][] mat, int row, int col, int size) {
+		
+		// top & bottom
+		for (int i=col; i<col+size; i++) {
+			if (mat[row][i] != 1 && mat[row+size-1][i] != 1)
+				return false;
+		}
+		
+		for (int i=row; i<row+size; i++) {
+			if (mat[i][col] != 1 && mat[i][col+size-1] != 1)
+				return false;
+		}
+		
+		return true;
+	}
+	
+	public List<String> wordTransformer(String w1, String w2, Set<String> dict) {
+		List<String> result = new ArrayList<>();
+		ResultWord resultWord = wordTransformer(w1.toCharArray(), w2.toCharArray(), 0, dict, result);
+		if (resultWord.isWord)
+			return result;
+		else
+			return new ArrayList<>();
+		
+	}
+	
+	private ResultWord wordTransformer(char[] word1, char[] word2, int index, Set<String> dict, List<String> result) {
+		if (index >= word1.length)
+			return new ResultWord("", true);
+
+		ResultWord res = null;
+		
+		if (word1[index] == word2[index]) {
+			return wordTransformer(word1, word2, index+1, dict, result);
+		} else {
+			char temp = word1[index];
+			word1[index] = word2[index];
+			if (dict.contains(new String(word1))) {
+				result.add(new String(word1));
+				if (!(res = wordTransformer(word1, word2, index+1, dict, result)).isWord) {
+					result.remove(result.size()-1);
+				} else if (res.str.isEmpty()) {
+					res = new ResultWord(result.get(result.size()-1), true); // last word
+				}
+			} else {
+				word1[index] = temp;
+				if ((res = wordTransformer(word1, word2, index+1, dict, result)).isWord) {
+					char arr[] = res.str.toCharArray();
+					arr[index] = word2[index];
+					if (dict.contains(new String(arr))) {
+						res = new ResultWord(new String(arr), true);
+						result.add(new String(word1));
+					}
+				}
+			}
+			word1[index] = temp;
+		}
+		
+		return res;
+	}
+	
+	private class ResultWord {
+		String str;
+		boolean isWord;
+		
+		public ResultWord(String str, boolean isWord) {
+			this.str = str;
+			this.isWord = isWord;
+		}
+	}
+	
+	public int volumeOfHistogramBetter(int[] arr) {
+		int maxLR[] = new int[arr.length];
+		int maxRL[] = new int[arr.length];
+		int delta[] = new int[arr.length];
+		
+		int max = arr[0];
+		for (int i=0; i<arr.length; i++) {
+			max = Math.max(max, arr[i]);
+			maxLR[i] = max;
+		}
+		
+		max = arr[arr.length-1];
+		for (int i=arr.length-1; i>=0; i--) {
+			max = Math.max(max, arr[i]);
+			maxRL[i] = max;
+		}
+		
+		for (int i=0; i<arr.length; i++) {
+			delta[i] = Math.min(maxLR[i], maxRL[i]) - arr[i];
+		}
+		
+		int sum = 0;
+		
+		for (int i=0; i<arr.length; i++) {
+			sum += delta[i];
+		}
+		
+		return sum;
+	}
+	
+	public int volumeOfHistogram(int[] arr) {
+		
+		int vol = 0;
+		Stack<Integer> stack = new Stack<>();
+		
+		for (int i=0; i<arr.length; i++) {
+			if (arr[i] != 0) {
+				if (!stack.isEmpty() && arr[i] >= arr[stack.peek()]) {
+					
+					while (stack.size() > 1 && arr[i] > arr[stack.peek()]) {
+						vol -= arr[stack.pop()];
+					}
+					int prevIndex = stack.pop();
+					int minVal = Math.min(arr[i], arr[prevIndex]);
+					vol += minVal*(i-prevIndex-1);
+				}
+				stack.add(i);
+			}
+		}
+		
+		
+		while(stack.size() > 1) {
+			int index = stack.pop();
+			int prevIndex = stack.pop();
+			int minVal = Math.min(arr[index], arr[prevIndex]);
+			vol += minVal * (index-prevIndex-1);
+		}
+		
+		return vol;
+	}
+	
+	public BigInteger product(int N) {
+		BigInteger prod = new BigInteger("1");
+		for (int i=2; i<=N; i++) {
+			prod = prod.multiply(new BigInteger(String.valueOf(i)));
+		}
+		return prod;
+	}
+	
+	public BigInteger sum(int N) {
+		BigInteger sum = new BigInteger(String.valueOf(N));
+		BigInteger sum1 = new BigInteger(String.valueOf(N + 1));
+		return sum.multiply(sum1).divide(new BigInteger(String.valueOf(2)));
+	}
+	
+	
+	
+	private class HeapNode {
+		int val;
+		int index;
+		
+		public HeapNode(int val, int index) {
+			this.val = val;
+			this.index = index;
+		}
+		
+		@Override
+		public String toString() {
+			return String.valueOf(index);
+		}
+	}
+	
+	public int[] shortestSupersequence1(int input[], int[] seq) {
+		Map<Integer, LinkedList<Integer>> map = new HashMap<>();
+		for (int val : input) {
+			map.put(val, new LinkedList<>());
+		}
+		
+		for (int i=0; i<seq.length; i++) {
+			if (map.containsKey(seq[i])) {
+				map.get(seq[i]).add(i);
+			}
+		}
+		
+		int[] range = {-1, -1};
+		
+		PriorityQueue<HeapNode> queue = new PriorityQueue<>(new Comparator<HeapNode>() {
+
+			@Override
+			public int compare(HeapNode o1, HeapNode o2) {
+				if (o1.index <= o2.index)
+					return -1;
+				else
+					return 1;
+			}
+		});
+		
+		int max = 0;
+		
+		for (int val : map.keySet()) {
+			List<Integer> list = map.get(val);
+			if (list.isEmpty()) {
+				return range;
+			}
+			int index = list.get(0);
+			queue.add(new HeapNode(val, index));
+			if (index > max)
+				max = index;
+		}
+		
+		int start = 0, end = seq.length-1;
+		
+		while (true) {
+			int min = queue.peek().index;
+			if (max-min < end-start) {
+				start = min;
+				end = max;
+			}
+			
+			HeapNode node = queue.poll();
+			LinkedList<Integer> list = map.get(node.val);
+			list.removeFirst();
+			if (list.isEmpty())
+				break;
+			
+			queue.add(new HeapNode(node.val, list.get(0)));
+			max = Math.max(max, list.get(0));
+		}
+		
+		range[0] = start;
+		range[1] = end;
+		return range;
+		
+	}
+	
+	public int[] shortestSupersequence(int input[], int[] seq) {
+		Set<Integer> inputSet = new HashSet<>();
+		for (int a : input) {
+			inputSet.add(a);
+		}
+		
+		Set<Integer> curr = new HashSet<>();
+		LinkedList<Integer> queue = new LinkedList<>();
+		int[] res = new int[2];
+		
+		int min = Integer.MAX_VALUE;
+		
+		for (int i=0; i<seq.length; i++) {
+			if (inputSet.contains(seq[i])) {
+				if (!curr.contains(seq[i])) {
+					curr.add(seq[i]);
+					queue.add(i);
+				}
+				if (curr.size() == inputSet.size()) {
+					int firstIndex = queue.getFirst();
+					int lastIndex = queue.getLast();
+					if (lastIndex - firstIndex < min) {
+						min = lastIndex - firstIndex;
+						res[0] = firstIndex;
+						res[1] = lastIndex;
+					}
+					queue.removeFirst();
+					curr.remove(seq[firstIndex]);
+				}
+			}
+		}
+		
+		return res;
 	}
 	
 	public void multiSearch(String b, String[] T) {
