@@ -1,4 +1,4 @@
-package solutions;
+package CrackingTheCodingInterview6;
 
 import java.util.HashSet;
 import java.util.Set;

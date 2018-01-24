@@ -3,11 +3,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import CrackingTheCodingInterview6.SortingAlgorithms;
 import datastructures.MyPriorityQueue;
-import solutions.SortingAlgorithms;
 
 public class RoughWork {
 	

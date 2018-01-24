@@ -1,4 +1,4 @@
-package solutions;
+package CrackingTheCodingInterview6;
 
 public class Helper {
 	

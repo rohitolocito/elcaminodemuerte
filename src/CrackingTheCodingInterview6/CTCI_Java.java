@@ -1,4 +1,4 @@
-package solutions;
+package CrackingTheCodingInterview6;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

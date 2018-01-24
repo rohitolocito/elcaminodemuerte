@@ -1,4 +1,4 @@
-package solutions;
+package CrackingTheCodingInterview6;
 
 import java.lang.Thread.State;
 import java.util.ArrayList;

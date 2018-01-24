@@ -1,4 +1,4 @@
-package solutions;
+package CrackingTheCodingInterview6;
 
 import datastructures.MyBinaryNode;
 import datastructures.MyBinaryTree;

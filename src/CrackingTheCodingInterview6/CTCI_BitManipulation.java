@@ -1,4 +1,4 @@
-package solutions;
+package CrackingTheCodingInterview6;
 
 import java.util.ArrayList;
 import java.util.List;
