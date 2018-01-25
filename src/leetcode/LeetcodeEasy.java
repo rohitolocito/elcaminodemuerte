@@ -2,6 +2,7 @@ package leetcode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -61,7 +62,111 @@ public class LeetcodeEasy {
 		System.out.println(-1 % 9);
 		
 		System.out.println(run.countBinarySubstrings("10101"));
+		
+		int[] arr = {4,3,2,7,8,2,3,1};
+		System.out.println(run.findDisappearedNumbers(arr));
+		System.out.println("abc".compareTo("bcd"));
 	}
+	
+	//720. Longest Word in Dictionary
+    public String longestWord(String[] words) {
+        PriorityQueue<String> queue = new PriorityQueue<>(new Comparator<String>() {
+           @Override
+            public int compare(String o1, String o2) {
+                if (o1.length() > o2.length())
+                    return -1;
+                else if (o1.length() == o2.length())
+                    return o1.compareTo(o2);
+                else
+                    return 1;
+            }
+        });
+        
+        Set<String> set = new HashSet<>();
+        for (String s : words) {
+            set.add(s);
+            queue.add(s);
+        }
+        
+        while (!queue.isEmpty()) {
+            String w = queue.poll();
+            boolean res = true;
+            for (int i = 1; i < w.length() ; i++) {
+                String sub = w.substring(0, i);
+                if (!set.contains(sub)) {
+                    res = false;
+                    break;
+                }
+            }
+            if (res)
+                return w;
+        }
+        
+        return "";
+    }
+	
+	//389. Find the Difference better solution
+	 public char findTheDifferenceBetter(String s, String t) {
+		 int c = t.charAt(t.length()-1);
+		 for (int i=0; i<s.length(); i++) {
+			 c = c ^ s.charAt(i);
+			 c = c ^ t.charAt(i);
+		 }
+		 return (char)c;
+	 }
+	//389. Find the Difference
+	 public char findTheDifference(String s, String t) {
+        int sum = 0;
+        for (int i=0; i<s.length(); i++) {
+            sum -= s.charAt(i) - 'a';
+        }
+        
+        for (int i=0; i<t.length(); i++) {
+            sum += t.charAt(i) - 'a';
+        }
+        
+        return (char)('a' + sum);
+    }
+	
+	//283. Move Zeroes
+    public void moveZeroes(int[] nums) {
+        int lastNonZero = 0;
+        
+        for (int i=0; i<nums.length; i++) {
+            if (nums[i] != 0) {
+                swap(nums, lastNonZero++, i);
+            }
+        }
+    }
+    
+    private void swap(int[] nums, int a, int b) {
+        int temp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = temp;
+    }
+	
+	//448. Find All Numbers Disappeared in an Array
+	//
+	public List<Integer> findDisappearedNumbers(int[] nums) {
+		List<Integer> list = new ArrayList<>();
+	       for (int i=0; i<nums.length; ) {
+	            int index = nums[i] - 1;
+	            if (index >= 0 && nums[index] != -1) {
+	                nums[i] = nums[index];
+	                nums[index] = -1;
+	            } else {
+	                i++;
+	            }
+	        }
+	        
+	        for (int i=0; i<nums.length; i++) {
+	            if (nums[i] != -1) {
+	                list.add(i+1);
+	            }
+	        }
+	        
+	        return list;
+    }
 	
 	//696. Count Binary Substrings
 	 public int countBinarySubstrings(String s) {
