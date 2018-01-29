@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -18,6 +19,22 @@ class TreeNode {
     TreeNode left;
     TreeNode right;
     TreeNode(int x) { val = x; }
+    
+    @Override
+    public String toString() {
+    	return String.valueOf(val);
+    }
+}
+
+class ListNode {
+     int val;
+     ListNode next;
+     ListNode(int x) { val = x; }
+     
+     @Override
+     public String toString() {
+     	return String.valueOf(val);
+     }
 }
 
 class Employee {
@@ -66,6 +83,501 @@ public class LeetcodeEasy {
 		int[] arr = {4,3,2,7,8,2,3,1};
 		System.out.println(run.findDisappearedNumbers(arr));
 		System.out.println("abc".compareTo("bcd"));
+		System.out.println(run.sumTwo(321, 123));
+		
+		TreeNode node1 = new TreeNode(1);
+		node1.left = new TreeNode(2);
+		node1.right = new TreeNode(3);
+		node1.left.right = new TreeNode(4);
+		
+		System.out.println(run.tree2str(node1));
+		
+		int[] bits = {0,1,0,0};
+		System.out.println(run.isOneBitCharacter(bits));
+		
+		TreeNode con = new TreeNode(2);
+		con.left = new TreeNode(0);
+		con.right = new TreeNode(3);
+		con.left.left = new TreeNode(-4);
+		con.left.right = new TreeNode(1);
+		
+		run.inOrder(run.convertBST(con));
+		System.out.println();
+		System.out.println(run.titleToNumber("T"));
+		
+		int n= 19010;
+		int c = 0;
+		while (n != 0) {
+			c++;
+			n = n/26;
+		}
+		System.out.println(c);
+		
+		System.out.println(1/Math.pow(26, 10));
+		
+		System.out.println(run.convertToTitle(1));
+		
+		int[] input = {1,3,2};
+		System.out.println(run.minMoves2(input));
+		
+		TreeNode node = new TreeNode(1);
+		node.left = new TreeNode(2);
+		node.right = new TreeNode(3);
+		node.left.left = new TreeNode(4);
+		node.right.left = new TreeNode(5);
+		
+		System.out.println(run.sumOfLeftLeaves(node));
+		System.out.println(run.findTilt(node));
+		
+		ListNode listNode = new ListNode(1);
+		listNode.next = new ListNode(2);
+		listNode.next.next = new ListNode(6);
+		listNode.next.next.next = new ListNode(3);
+		listNode.next.next.next.next = new ListNode(4);
+		listNode.next.next.next.next.next = new ListNode(5);
+		listNode.next.next.next.next.next.next = new ListNode(6);
+		
+		listNode = run.removeElementsIterative(listNode, 6);
+//		while (listNode != null) {
+//			System.out.print(listNode + " ~>");
+//			listNode = listNode.next;
+//		}
+		
+		String list1[] = {"Shogun", "Tapioca Express", "Burger King", "KFC"};
+		String list2[] = 	{"KFC", "Shogun", "Burger King"};
+		System.out.println(Arrays.toString(run.findRestaurant(list1, list2)));
+		
+		listNode = run.reverseList(listNode);
+		while (listNode != null) {
+			System.out.print(listNode + " ~>");
+			listNode = listNode.next;
+		}
+		System.out.println();
+		System.out.println(run.validPalindrome("aguokepatgbnvfqmgmlcupuufxoohdfpgjdmysgvhmvffcnqxjjxqncffvmhvgsymdjgpfdhooxfuupuculmgmqfvnbgtapekouga"));
+		System.out.println(run.validPalindrome("abcab"));
+		
+		System.out.println(Integer.parseInt("-2"));
+		
+		int[] cost = {1, 100, 1, 1, 1, 100, 1, 1, 100, 1};
+		System.out.println(run.minCostClimbingStairs(cost));
+		
+		System.out.println(run.readBinaryWatch(1));
+	}
+	
+    public List<String> readBinaryWatch(int n) {
+        List<String> list = new ArrayList<>();
+        
+        if (n < 0)
+            return list;
+        
+        for (int hrs=0; hrs<=11; hrs++) {
+            for (int mins=0; mins<=59; mins++) {
+                if (numOfOnes(hrs) + numOfOnes(mins) == n) {
+                    list.add(buildStr(hrs, mins));
+                }
+            }
+            
+        }
+        
+        return list;
+    }
+    
+    private String buildStr(int hrs, int mins) {
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append(hrs);
+        
+        sb.append(':');
+
+        if (mins >= 0 && mins <= 9) {
+            sb.append('0');
+            sb.append(mins);
+        } else {
+            sb.append(mins);
+        }
+        
+        return sb.toString();
+    }
+    
+    private int numOfOnes(int n) {
+        int count = 0;
+        while (n != 0) {
+            n = n & (n-1);
+            count++;
+        }
+        return count;
+    	//return Integer.bitCount(n);
+    }
+	
+	   public int climbStairs(int n) {
+	        if (n < 1)
+	            return 0;
+	        
+	        int dp[] = new int[n+1];
+	        return steps(n, dp);
+	    }
+	    
+	    private int steps(int n, int dp[]) {
+	        if (n < 0)
+	            return 0;
+	        
+	        if (n == 0 || n == 1)
+	            return 1;
+	        
+	        if (dp[n] > 0)
+	            return dp[n];
+	        
+	        dp[n] = steps(n-1, dp) + steps(n-2, dp);
+	        return dp[n];
+	    }
+	
+	public int minCostClimbingStairs(int[] cost) {
+        int oneStep = cost[0];
+        int twoStep = cost[1];
+        for (int i=2; i<cost.length; i++) {
+           int bestWith = oneStep + cost[i];
+           int bestWithout = twoStep;
+           int best = Math.min(bestWith, bestWithout);
+           oneStep = best;
+           twoStep = bestWith;
+        }
+        return oneStep;
+    }
+	
+    public int longestPalindrome(String s) {
+        Set<Character> set = new HashSet<>();
+        int len = 0;
+        for (int i=0; i<s.length(); i++) {
+            char c = s.charAt(i);
+            if (set.contains(c)) {
+                len +=2;
+                set.remove(c);
+            } else {
+                set.add(c);
+            }
+        }
+        
+        return len + (set.isEmpty() ? 0 : 1);
+    }
+	
+    public boolean validPalindrome(String s) {
+        boolean deleted = false;
+        int i =0, j = s.length() -1;
+        while (i < j) {
+            char ci = s.charAt(i);
+            char cj = s.charAt(j);
+            if (ci != cj && deleted) {
+                return false;
+            } 
+            
+            if (ci != cj) {
+            	//ab...ab
+            	if (s.charAt(i+1) == cj && s.charAt(j-1) == ci) {
+            		i++;
+            		j--;
+            	} else if (s.charAt(i+1) == cj) {
+            		deleted = true;
+                    i++;
+                } else if(s.charAt(j-1) == ci) {
+                	deleted = true;
+                    j--;
+                } else {
+                    return false;
+                }
+                
+            } else {
+                i++;
+                j--;
+            }
+        }
+        return true;
+    }
+	
+    public boolean isPalindrome(String s) {
+        int i=0, j = s.length() -1;
+        while (i < j) {
+            char ci = s.charAt(i);
+            char cj = s.charAt(j); 
+            if (!isAlphanumeric(ci)) {
+                i++;
+            } else if (!isAlphanumeric(cj)) {
+                j--;
+            } else {
+                ci = getLowerCase(ci);
+                cj = getLowerCase(cj);
+                if (ci != cj)
+                    return false;
+                i++;
+                j--;
+            }
+        }
+        return true;
+    }
+    
+    private char getLowerCase(char c) {
+        if (c >= 'A' && c <= 'Z') {
+            return (char) ('a' + c - 'A');
+        }
+        return c;
+    }
+    
+    private boolean isAlphanumeric(char c) {
+        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))
+            return true;
+        return false;
+    }
+	
+	  public ListNode reverseList(ListNode head) {
+	        if (head == null || head.next == null)
+	            return head;
+	        
+	        ListNode next = head.next;
+	        ListNode node = reverseList(head.next);
+	        
+	        if (next != null) {
+	        	next.next = head;
+	        	head.next = null;
+	        }
+	        
+	        return node;
+	    }
+	
+	 private Map<Character, Integer> romanMap;
+	    
+	    public int romanToInt(String s) {
+	        int prev = 0, val = 0;
+	        for (int i=0; i<s.length(); i++) {
+	            char c = s.charAt(i);
+	            int curr = romanMap.getOrDefault(c, 0);
+	            if (curr > prev) {
+	                val = val + curr - prev - prev;
+	            } else {
+	                val = val + curr;
+	            }
+	            prev = curr;
+	            for (Entry<Character, Integer> entry : romanMap.entrySet()) {
+	            	
+	            }
+	        }
+	        return val;
+	    }
+	
+	public int findTilt(TreeNode root) {
+        if (root == null)
+            return 0;
+        
+        int left = findTilt(root.left);
+        int right = findTilt(root.right);
+        return left + right + Math.abs( (root.left != null ? root.left.val : 0) - (root.right != null ? root.right.val : 0));
+    }
+	
+    public int sumOfLeftLeaves(TreeNode root) {
+        return sumOfLeftLeaves(root, true);
+    }
+    
+    private int sumOfLeftLeaves(TreeNode root, boolean add) {
+        if (root == null)
+            return 0;
+        
+        if (root.left == null && root.right == null && add)
+            return root.val;
+        
+        int left = sumOfLeftLeaves(root.left, true);
+        int right = sumOfLeftLeaves(root.right, false);
+        return left + right;
+    }
+	
+	//53. Maximum Subarray
+    public int maxSubArray(int[] nums) {
+        int maxSum = Integer.MIN_VALUE;
+        int currSum = 0;
+        
+        for (int i=0; i<nums.length; i++) {
+            currSum += nums[i];
+            if (currSum > maxSum) {
+                maxSum = currSum;
+            }
+            if (currSum < 0) {
+                currSum = 0;
+            }
+        }
+        
+        return maxSum;
+    }
+	
+	//462. Minimum Moves to Equal Array Elements II
+	   public int minMoves2(int[] nums) {
+	        // Arrays.sort(nums); use quick select algo to find median in linear time
+	        int median = median(nums);
+	        int moves = 0;
+	        for (int n : nums) {
+	            moves += Math.abs(n-median);
+	        }
+	        return moves;
+	    }
+	    
+	    private int median(int[] nums) {
+	        if (nums.length % 2 == 0) {
+	            return (kthSmallest(nums, (nums.length-1)/2 + 1) + kthSmallest(nums, nums.length/2 + 1))/2;
+	        } else {
+	            return kthSmallest(nums, nums.length/2 + 1);
+	        }
+	    }
+	    
+	    private int kthSmallest(int[] nums, int k) {
+	        int low = 0;
+	        int high = nums.length-1;
+	        while (low <= high) {
+	            int index = partition(nums, low, high);
+	            if (index == k-1)
+	                return nums[index];
+	            
+	            if (index > k-1) {
+	                high = index-1;
+	            } else {
+	                low = index+1;
+	            }
+	        }
+	        
+	        return nums[0];
+	    }
+	    
+	    private int partition(int nums[], int low, int high) {
+	        int pivot = high;
+	        int j = high-1;
+	        while (low <= j) {
+	            if (nums[low] >= nums[pivot]) {
+	                swap(nums, low, j);
+	                j--;
+	            } else {
+	                low++;
+	            }
+	        }
+	        swap(nums, pivot, j+1);
+	        return j+1;
+	    }
+	    
+//	    private void swap(int[] nums, int a, int b) {
+//	        int temp = nums[a];
+//	        nums[a] = nums[b];
+//	        nums[b] = temp;
+//	    }
+	
+	//168. Excel Sheet Column Title
+	 public String convertToTitle(int n) {
+	       String s = "";
+	       while (n != 0) {
+	           s = (char)('A' + ( (n-1) % 26)) + s;
+	           n = (n-1)/26;
+	       }
+	       return s;
+	    }
+
+	
+	
+	//171. Excel Sheet Column Number
+	   public int titleToNumber(String s) {
+	        int sum = 0;
+	        // for (int i= s.length()-1; i >= 0; i--) {
+	        //     sum = sum + (int) Math.pow(26, s.length()-1-i)*(s.charAt(i) - 'A' + 1);
+	        // }
+	        for (int i=0; i<s.length(); i++) {
+	            sum = sum*26 + (s.charAt(i) - 'A' + 1);
+	        }
+	        return sum;
+	    }
+	
+	public void inOrder(TreeNode node) {
+		if (node == null)
+			return;
+		
+		inOrder(node.left);
+		System.out.print(node+" ");
+		inOrder(node.right);
+	}
+	
+	//538. Convert BST to Greater Tree
+	  public TreeNode convertBST(TreeNode root) {
+	        convertBST(root, 0);
+	        return root;
+	    }
+	    
+	   private int convertBST(TreeNode root, int toAdd) {
+	        if (root == null)
+	            return 0;
+	        
+	        int right = convertBST(root.right, toAdd);
+	        int originalRootVal = root.val;
+	        root.val += toAdd + right;
+	        int left = convertBST(root.left, root.val);
+
+	        return left + originalRootVal + right;
+	    }
+	
+	//717. 1-bit and 2-bit Characters
+    public boolean isOneBitCharacter(int[] bits) {
+        boolean oneBit = true;
+        int val = 0;
+        for (int i=0; i<bits.length; i++) {
+            val = val*10 + bits[i];
+            if (val == 10 || val == 11) {
+                if (i == bits.length-1)
+                    oneBit = false;
+                else
+                    oneBit = true;
+                val = 0;
+            }
+            if (i %2 == 1 && val == 01) {
+                oneBit = false;
+            }
+            
+        }
+        
+        return oneBit;
+    }
+	
+	  public String tree2str(TreeNode t) {
+	        StringBuilder sb = new StringBuilder();
+	        tree2str(t, sb);
+	        return sb.toString();
+	    }
+	    
+	    private void tree2str(TreeNode t, StringBuilder sb) {
+	        if (t == null)
+	            return;
+	        
+	        sb.append(t.val);
+	        
+	        if (t.left != null) {
+	            sb.append('(');
+	            tree2str(t.left, sb);
+	            sb.append(')');
+	        }
+	        
+	        if (t.right != null) {
+	            sb.append('(');
+	            tree2str(t.right, sb);
+	            sb.append(')');
+	        }
+	        
+	    }
+	
+	// 8 + 9
+	// 1000
+	// 1001
+	
+	// 1 + 2
+	// 0001
+	// 0010
+	
+	public int sumTwo(int a, int b) {
+		while (b != 0) {
+			int sum = a ^ b;
+			int carry = (a & b) << 1;
+			a = sum;    
+			b = carry; 
+		}
+		return a;
 	}
 	
 	//720. Longest Word in Dictionary
@@ -324,6 +836,89 @@ public class LeetcodeEasy {
         openCloseMap.put('(', ')');
         openCloseMap.put('{', '}');
         openCloseMap.put('[', ']');
+        
+        romanMap = new HashMap<>();
+        romanMap.put('M', 1000);
+        romanMap.put('D', 500);
+        romanMap.put('C', 100);
+        romanMap.put('L', 50);
+        romanMap.put('X', 10);
+        romanMap.put('V', 5);
+        romanMap.put('I', 1);
+    }
+    
+public String[] findRestaurant(String[] list1, String[] list2) {
+        
+        Map<String, Integer> map1 = new HashMap<>();
+        for (int i=0; i<list1.length; i++) {
+            map1.put(list1[i], i);
+        }
+        List<String> bucket[] = new List[list1.length + list2.length];
+        for (int i=0; i<list2.length; i++) {
+            if (map1.containsKey(list2[i])) {
+                int index1 = map1.get(list2[i]);
+                int index2 = i;
+                int sum = index1 + index2;
+                if (bucket[sum] == null) {
+                    bucket[sum] = new ArrayList<>();
+                }
+                bucket[sum].add(list2[i]);
+            }
+        }
+        String[] res = null;
+        for (int i=0; i<bucket.length; i++) {
+            if (bucket[i] != null) {
+                List<String> list = bucket[i];
+                res = new String[list.size()];
+                for (int j=0; j<res.length; j++) {
+                    res[j] = list.get(j);
+                }
+                break;
+            }
+        }
+        
+        return res;
+        
+    }
+    
+    public ListNode removeElementsIterative(ListNode head, int val) {
+        if (head == null)
+        	return null;
+        
+        ListNode node = null, nodeCurr = null;
+        
+        while (head != null) {
+        	if (head.val != val) {
+        		if (node == null) {
+        			node = head;
+        			nodeCurr = head;
+        		} else {
+        			nodeCurr.next = head;
+        			nodeCurr = head;
+        		}
+        	} else {
+        		if (nodeCurr != null)
+        			nodeCurr.next = null;
+        	}
+        	head = head.next;
+        }
+        
+        return node;
+
+    }
+    
+    public ListNode removeElements(ListNode head, int val) {
+        if (head == null)
+            return null;
+        
+        ListNode node = removeElements(head.next, val);
+        if (head.val == val)
+            return node;
+        else {
+        	head.next = node;
+            return head;
+        }
+
     }
     
     //463. island perimeter

@@ -1,7 +1,9 @@
 package leetcode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 public class LeetcodeMedium {
@@ -13,6 +15,8 @@ public class LeetcodeMedium {
 		int[][] mat = { {1, 0, 0, 1}, {0, 1, 1, 0}, {0, 1, 1, 1}, {1, 0, 1, 1}};
 		System.out.println(run.findCircleNum(mat));
 		
+		List<Character> bucket[] = new List[1];
+		
 		
 		TreeNode root = new TreeNode(1);
 		root.left = new TreeNode(2);
@@ -22,8 +26,123 @@ public class LeetcodeMedium {
 		
 		System.out.println(run.zigzagLevelOrder(root));
 		System.out.println(run.zigzagLevelOrderIterative(root));
+		
+		int nums[] = {1,-1,-1,1};
+		int nums1[] = {0,0,0,0,0,0,0,0,0,0};
+		System.out.println(run.subarraySum(nums1, 0));
+		System.out.println(run.subarraySum1(nums1, 0));
 
 	}
+	
+	  private static final Map<Character, Character[]> map = new HashMap<>();
+	    
+	    static {
+	        map.put('2', new Character[] {'a', 'b', 'c'});
+	        map.put('3', new Character[] {'d', 'e', 'f'});
+	        map.put('4', new Character[] {'g', 'h', 'i'});
+	        map.put('5', new Character[] {'j', 'k', 'l'});
+	        map.put('6', new Character[] {'m', 'n', 'o'});
+	        map.put('7', new Character[] {'p', 'q', 'r', 's'});
+	        map.put('8', new Character[] {'t', 'u', 'v'});
+	        map.put('9', new Character[] {'w', 'x', 'y', 'z'});
+	        
+	    }
+	    
+	    public List<String> letterCombinations(String digits) {
+	        List<String> result = new ArrayList<>();
+	        
+	        if (digits.isEmpty())
+	            return result;
+	        
+	        StringBuilder sb = new StringBuilder();
+	        letterCombinations(digits, 0, sb, result);
+	        return result;
+	    }
+	    
+	    private void letterCombinations(String digits, int index, StringBuilder sb, List<String> result) {
+	        if (index >= digits.length()) {
+	            result.add(sb.toString());
+	            return;
+	        }
+	        
+	        Character[] arr = map.getOrDefault(digits.charAt(index), new Character[]{});
+	        int len = sb.length();
+	        
+	        for (int i=0; i<arr.length; i++) {
+	            sb.append(arr[i]);
+	            letterCombinations(digits, index+1, sb, result);
+	            sb.setLength(len);
+	        }
+	    }
+	
+    public int subarraySum1(int[] nums, int k) {
+        int count = 0, sum = 0;
+        HashMap < Integer, Integer > map = new HashMap < > ();
+        map.put(0, 1);
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            if (map.containsKey(sum - k))
+                count += map.get(sum - k);
+            map.put(sum, map.getOrDefault(sum, 0) + 1);
+        }
+        return count;
+    }
+	
+	public int subarraySum(int[] nums, int k) {
+        int count = 0;
+        int sum = 0;
+        
+        Map<Integer, Integer> map = new HashMap<>();
+        
+        for (int i=0; i<nums.length; i++) {
+            sum += nums[i];
+            if (sum == k)
+                count++;
+            
+            if (map.containsKey(sum-k)) {
+                count++;
+            }
+            map.put(sum, i);
+        }
+        
+        return count;
+    }
+	
+    public List<Integer> inorderTraversal(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<>();
+        List<Integer> list = new ArrayList<>();
+                
+        while (root != null || !stack.isEmpty()) {
+            
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+        
+            TreeNode node = stack.pop();
+            list.add(node.val);
+            root = node.right;
+        }
+        
+        return list;
+    }
+	
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        
+        while (root != null || !stack.isEmpty()) {
+            if (root != null) {
+                list.add(root.val);
+                if (root.right != null)
+                    stack.push(root.right);
+                root = root.left;
+            } else {
+                root = stack.pop();
+            }
+        }
+        return list;
+    }
 	
 	public List<List<Integer>> zigzagLevelOrderIterative(TreeNode root) {
 		Stack<TreeNode> ltr = new Stack<>();
