@@ -187,6 +187,8 @@ public class RoughWork {
 		}
 		
 		System.out.println(Integer.MAX_VALUE + 292929);
+		
+		System.out.println(Integer.toHexString(-1));
 	}
 	
 	public static Node interweaveLists(Node node1, Node node2) {

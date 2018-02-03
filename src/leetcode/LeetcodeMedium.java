@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +32,69 @@ public class LeetcodeMedium {
 		int nums1[] = {0,0,0,0,0,0,0,0,0,0};
 		System.out.println(run.subarraySum(nums1, 0));
 		System.out.println(run.subarraySum1(nums1, 0));
+		
+		int elements[] = {0,0,0,1,3,5,6,7,8,8};
+		System.out.println(run.findClosestElements(elements, 2, 2));
+		
 
 	}
+	
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        List<Integer> list = new ArrayList<>();
+        
+        int closestIndex[] = {-1};
+        findClosestIndex(arr, 0, arr.length-1, x, closestIndex);
+        
+        if (closestIndex[0] == -1)
+            return list;
+        
+        int i = closestIndex[0];
+        int j = i-k+1;
+        
+        while (j <= i) {
+            if (j >= 0) {
+                list.add(arr[j]);
+            }
+            j++;
+        }
+        
+        if (list.size() < k) {
+            j= i+1;
+            while (j < arr.length) {
+                if (list.size() == k)
+                    break;
+                list.add(arr[j]);
+                j++;
+            }
+        }
+        
+        
+        return list;
+        
+    }
+    
+    private void findClosestIndex(int[] arr, int low, int high, int x, int closestIndex[]) {
+        if (low > high)
+            return;
+        
+        int mid = (low + high) >>> 1;
+        
+        if (arr[mid] == x) {
+            closestIndex[0] = mid;
+            return;
+        }
+        
+        if (closestIndex[0] == -1 || Math.abs(arr[mid] - x) < Math.abs(x-arr[closestIndex[0]])) {
+            closestIndex[0] = mid;
+        }
+        
+        if (x > arr[mid]) {
+            findClosestIndex(arr, mid+1, high, x, closestIndex);
+        } else {
+            findClosestIndex(arr, low, mid-1, x, closestIndex);
+        }
+        
+    }
 	
 	  private static final Map<Character, Character[]> map = new HashMap<>();
 	    

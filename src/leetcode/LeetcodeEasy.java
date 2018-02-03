@@ -2,6 +2,7 @@ package leetcode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +14,20 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+
+
+class Interval {
+    int start;
+    int end;
+    Interval() { start = 0; end = 0; }
+    Interval(int s, int e) { start = s; end = e; }
+}
+
+class RandomListNode {
+    int label;
+    RandomListNode next, random;
+    RandomListNode(int x) { this.label = x; }
+};
 
 class TreeNode {
     int val;
@@ -162,7 +177,569 @@ public class LeetcodeEasy {
 		System.out.println(run.minCostClimbingStairs(cost));
 		
 		System.out.println(run.readBinaryWatch(1));
+		System.out.println(run.reverseStr("abcdefg", 2));
+		
+		int points[][] = {{0,0},{1,0},{-1,0},{0,1},{0,-1}};
+		System.out.println(run.numberOfBoomerangs(points));
+		
+		int points1[][] = {{0,0},{1,0},{2,0}};
+		System.out.println(run.numberOfBoomerangs(points1));
+		
+		System.out.println(run.convertToBase7(100));
+		
+		System.out.println(run.countBST(2));
+		
+		System.out.println(run.poorPigs(1000, 15, 60));
+		
+		System.out.println(Integer.toHexString(123));
+		
+		TreeNode s = new TreeNode(3);
+		s.left = new TreeNode(4);
+		s.right = new TreeNode(5);
+		s.left.left = new TreeNode(1);
+		s.left.right = new TreeNode(2);
+		
+		TreeNode t = new TreeNode(4);
+		t.left = new TreeNode(1);
+		t.right = new TreeNode(2);
+		
+		System.out.println(run.isSubtree(s, t));
+		
+		int nums[] = {4,14,2};
+		System.out.println(run.totalHammingDistance(nums));
+		
+		int array[] = {1,3};
+		System.out.println(run.searchInsert(array, 3));
+		
 	}
+	
+	//101. Symmetric Tree
+	public boolean isSymmetric(TreeNode root) {
+        return root == null || isSymmetric(root.left, root.right);
+    }
+	
+	private boolean isSymmetricIterative(TreeNode root) {
+		if (root == null)
+			return true;
+		
+		Queue<TreeNode> queue = new LinkedList<>();
+		
+		
+		queue.add(root.left);
+		queue.add(root.right);
+		
+		while (!queue.isEmpty()) {
+			TreeNode leftChild = queue.poll();
+			TreeNode rightChild = queue.poll();
+			
+			if (leftChild == null && rightChild == null) {
+				continue;
+			} else if (leftChild == null || rightChild == null) {
+				return false;
+			} else {
+				if (leftChild.val != rightChild.val) 
+					return false;
+				
+				queue.add(leftChild.left);
+				queue.add(rightChild.right);
+				
+				queue.add(leftChild.right);
+				queue.add(rightChild.left);
+			}
+		}
+		
+		return queue.isEmpty();
+	}
+    
+    private boolean isSymmetric(TreeNode left, TreeNode right) {
+        if (left == null && right == null)
+            return true;
+        
+        if (left == null || right == null)
+            return false;
+        
+        return left.val == right.val && isSymmetric(left.left, right.right) && isSymmetric(left.right, right.left);
+    }
+	
+	//35. Search Insert Position
+	 public int searchInsert(int[] nums, int target) {
+	        if (nums == null)
+	            return -1;
+	        
+	        if (nums.length == 0 || target < nums[0])
+	            return 0;
+	        
+	        if (target > nums[nums.length-1])
+	            return nums.length;
+	        
+	        return binarySearch(nums, 0, nums.length-1, target);
+	    }
+	    
+	    private int binarySearch(int[] nums, int low, int high, int target) {
+	        if (low > high)
+	            return -1;
+	        
+	        int mid = (low + high) >>> 1;
+	        
+	        if (nums[mid] == target)
+	            return mid;
+	        
+	        if (target > nums[mid]) {
+	            int index = binarySearch(nums, mid+1, high, target);
+	            if (index != -1)
+	                return index;
+	            else {
+	                return mid + 1;
+	            }
+	        } else {
+	            int index = binarySearch(nums, low, mid-1, target);
+	            if (index != -1)
+	                return index;
+	            else {
+	                return mid ;
+	            }
+	        }
+	    }
+	
+	//572. Subtree of Another Tree
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        if (t == null)
+            return false;
+        
+        if (s.val == t.val && isMatch(s, t)) {
+            return true;
+        }
+        
+        boolean left = isSubtree(s, t.left);
+        if (left)
+            return true;
+        
+        return isSubtree(s, t.right);
+    }
+    
+    private boolean isMatch(TreeNode s, TreeNode t) {
+        if (s == null && t == null)
+            return true;
+        
+        if (s == null || t == null)
+            return false;
+        
+        return s.val == t.val && isMatch(s.left, t.left) && isMatch(s.right, t.right);
+        
+    }
+	
+	//124. Binary Tree Maximum Path Sum
+    public int maxPathSum(TreeNode root) {
+        int maxSum[] = {Integer.MIN_VALUE};
+        maxPathSum(root, maxSum);
+        return maxSum[0] == Integer.MIN_VALUE ? 0 : maxSum[0];
+    }
+    
+    private int maxPathSum(TreeNode root, int[] maxSum) {
+        if (root == null)
+            return Integer.MIN_VALUE;
+        
+        int sum = root.val;
+        
+        int leftSum = maxPathSum(root.left, maxSum);
+        int rightSum = maxPathSum(root.right, maxSum);
+        
+        if (leftSum != Integer.MIN_VALUE && rightSum != Integer.MIN_VALUE) {
+            maxSum[0] = Math.max(maxSum[0], root.val + leftSum + rightSum);
+            sum = Math.max(sum, sum + Math.max(leftSum, rightSum));
+        }
+        else if (leftSum != Integer.MIN_VALUE) {
+            sum = Math.max(sum, sum + leftSum);
+        } 
+        else if (rightSum != Integer.MIN_VALUE) {
+            sum = Math.max(sum, sum + rightSum);
+        }
+        
+        maxSum[0] = Math.max(maxSum[0], sum);
+        
+        return sum;
+        
+    }
+	
+	// 687. Longest Univalue Path
+    public int longestUnivaluePath(TreeNode root) {
+        int[] longest = {0};
+        longestUnivaluePath(root, longest);
+        return longest[0] ;
+    }
+    
+    private Result longestUnivaluePath(TreeNode root, int[] longest) {
+        
+        if (root == null)
+            return null;
+  
+        Result result = new Result(root.val, 0);
+        
+        Result left = longestUnivaluePath(root.left, longest);
+        Result right = longestUnivaluePath(root.right, longest);
+        
+        if (left != null && left.val == root.val && right != null && right.val == root.val) {
+            longest[0] = Math.max(longest[0], left.count + right.count + 2);
+        }
+        
+        if (left != null && left.val == root.val) {
+            result.count = Math.max(result.count, left.count + 1);
+        }
+        
+        if (right != null && right.val == root.val) {
+            result.count = Math.max(result.count, right.count + 1);
+        }
+        
+        if (result.count > longest[0]) {
+            longest[0] = result.count;
+        }
+        
+        return result;
+    }
+    
+    private class Result {
+        int val;
+        int count;
+        
+        public Result(int val, int count) {
+            this.val = val;
+            this.count = count;
+        }
+    }
+	
+    public List<Interval> merge(List<Interval> intervals) {
+        
+        List<Interval> list = new ArrayList<>();
+        
+        if (intervals == null || intervals.isEmpty())
+            return list;
+        
+        Collections.sort(intervals, new Comparator<Interval>() {
+            
+           @Override
+           public int compare(Interval o1, Interval o2) {
+               if (o1.start < o2.start)
+                   return -1;
+               else if (o1.start == o2.start)
+                   return 0;
+               else
+                   return 1;
+           } 
+        });
+        
+        list.add(intervals.get(0));
+        
+        for (int i=1; i<intervals.size(); i++) {
+            Interval prev = list.get(list.size()-1);
+            Interval curr = intervals.get(i);
+            
+            if (curr.start <= prev.end) {
+                prev.end = Math.max(prev.end, curr.end);
+            } else {
+                list.add(curr);
+            }
+        }
+        
+        return list;
+
+        
+    }
+	
+    public String toHex(int num) {
+        StringBuilder sb = new StringBuilder();
+        char[] hex = {'0' , '1' , '2' , '3' , '4' , '5' ,
+        '6' , '7' , '8' , '9' , 'a' , 'b',
+        'c' , 'd' , 'e' , 'f'};
+        while (true) {
+            sb.append(hex[num&15]);
+            num = num >>> 4;
+            if (num == 0)
+                break;
+        }
+        return sb.reverse().toString();
+    }
+	
+    public RandomListNode copyRandomList(RandomListNode head) {
+        Map<RandomListNode, RandomListNode> map = new HashMap<>();
+        RandomListNode res = null, resCurr = null;
+        
+        while (head != null) {
+            
+            if (!map.containsKey(head)) {
+                if (res == null) {
+                    res = new RandomListNode(head.label);
+                    resCurr = res;
+                } else {
+                    resCurr.next = new RandomListNode(head.label);
+                    resCurr = resCurr.next;
+                }
+                map.put(head, resCurr);
+            } else {
+                resCurr.next = map.get(head);
+                resCurr = resCurr.next;
+            }
+            
+            if (head.random != null) {
+                RandomListNode random = head.random;
+                if (!map.containsKey(random)) {
+                    resCurr.random = new RandomListNode(random.label);
+                    map.put(random, resCurr.random);
+                } else {
+                    resCurr.random = map.get(random);
+                }
+            }
+            
+            head = head.next;
+        }
+        
+        return res;
+    }
+	
+	// 594. Longest Harmonious Subsequence
+	   public int findLHS(int[] nums) {
+	        Map<Integer, Integer> count = new HashMap<>();
+	        for (int n : nums) {
+	            count.put(n, count.getOrDefault(n, 0)+1);
+	        }
+	        int res = 0;
+	        
+	        for (int n : count.keySet()) {
+	            int min = n-1;
+	            if (count.containsKey(min)) {
+	                res = Math.max(res, count.get(n) + count.get(min));
+	            }
+	            int max = n+1;
+	            if (count.containsKey(max)) {
+	                res = Math.max(res, count.get(n) + count.get(max));
+	            }
+	        }
+	        
+	        return res;
+	    }
+	
+	  public List<List<Integer>> levelOrderBottom(TreeNode root) {
+	        List<List<Integer>> list = new ArrayList<>();
+	        Queue<TreeNode> queue = new LinkedList<>();
+	        if (root != null) {
+	            queue.add(root);
+	        }
+	        int level = -1;
+	        while (!queue.isEmpty()) {
+	            int count = queue.size();
+	            level++;
+	            while (count != 0) {
+	                TreeNode node = queue.poll();
+	                if (level == list.size()) {
+	                    list.add(new ArrayList<>());
+	                }
+	                list.get(list.size()-1).add(node.val);
+	                
+	                if (node.left != null)
+	                    queue.add(node.left);
+	                
+	                if (node.right != null)
+	                    queue.add(node.right);
+	                
+	                count--;
+	            }
+	        }
+	        
+	        reverseList(list);
+	        
+	        return list;
+	    }
+	    
+	    private void reverseList(List<List<Integer>> list) {
+	        int s=0, e=list.size()-1;
+	        while (s < e) {
+	            List<Integer> temp = list.get(s);
+	            list.set(s, list.get(e));
+	            list.set(e, temp);
+	            s++;
+	            e--;
+	        }
+	    }
+	
+	 public int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
+	        // int sessions = 0;
+	        // for (int i=0; i+minutesToDie <= minutesToTest; i++) {
+	        //     sessions += minutesToTest/(i+minutesToDie);
+	        // }
+	        int pigs = 0;
+	        while ((minutesToTest/minutesToDie + 1) * pigs < buckets) {
+	             pigs += 1;   
+	        }
+	        return pigs;
+	    }
+	
+	private int countBST(int n) {
+		if (n <=0)
+			return 0;
+		
+		if (n == 1)
+			return 1;
+		
+		int count = 0;
+		
+		for (int i=1; i<=n; i++) {
+			int left = countBST(i-1);
+			int right = countBST(n-i);
+			if (left == 0) {
+				count += right;
+			} else if (right == 0) {
+				count += left;
+			} else {
+				count += left * right;
+			}
+		}
+		
+		return count;
+		
+	}
+	
+//	private int countBST(int start, int end) {
+//		if (start > end)
+//			return 0;
+//		
+//		int count = 0;
+//		
+//		for (int i=start; i<=end; i++) {
+//			int left = countBST(start, i-1);
+//			int right = countBST(i+1, end);
+//			
+//		}
+//	}
+	
+	   public List<TreeNode> generateTrees(int n) {
+	        if (n <= 0) {
+	            return new ArrayList<>();
+	        }
+	        
+	        return generateTrees(1, n);
+	    }
+	    
+	    private List<TreeNode> generateTrees(int start, int end) {
+	        
+	        List<TreeNode> list = new ArrayList<>();
+	        
+	        if (start > end) {
+	            list.add(null);
+	            return list;
+	        }
+	        
+	        for (int i=start; i<=end; i++) {
+	            List<TreeNode> left = generateTrees(start, i-1);
+	            List<TreeNode> right = generateTrees(i+1, end);
+	            for(TreeNode l : left) {
+	                for (TreeNode r : right) {
+	                    TreeNode node = new TreeNode(i);
+	                    node.left = l;
+	                    node.right = r;
+	                    list.add(node);
+	                }
+	            }
+	        }
+	        
+	        return list;
+	        
+	    }
+	
+    public String convertToBase7(int num) {
+        StringBuilder sb = new StringBuilder();
+        if (num < 0) {
+            num = Math.abs(num);
+            sb.append('-');
+        }
+        int p = pow(num);
+        while (p >= 0) {
+        	int pow = (int)Math.pow(7, p--);
+            int x = num/pow;
+            if (x > 0) {
+                sb.append(x);
+                num = num % pow;
+            } else {
+                sb.append(0);
+            }
+        }
+        
+        return sb.toString();
+    }
+    
+    private int pow(int n) {
+        int[] arr = {9, 99, 999, 9999, 99999, 999999, 9999999, 99999999, 999999999};
+        for (int i=0; i<arr.length; i++) {
+            if (arr[i] > n) {
+                return i;
+            }
+        }
+        
+        return -1;
+    }
+	
+	   
+    public int numberOfBoomerangs(int[][] points) {
+        int boomerangs = 0;
+        for (int i=0; i<points.length; i++)
+            boomerangs += numberOfBoomerangs(i, points);
+        return boomerangs;
+    }
+    
+    private int numberOfBoomerangs(int index, int[][] points) {
+        int x = points[index][0];
+        int y = points[index][1];
+        int boomerangs = 0;
+        
+        Map<Integer, Integer> map = new HashMap<>();
+        
+        for (int i=0; i<points.length; i++) {
+        	if (index != i) {
+                int x1 = points[i][0];
+                int y1 = points[i][1];
+                
+                int xDiff = x1-x;
+                int yDiff = y1-y;
+                int dist = xDiff*xDiff + yDiff*yDiff;
+                map.put(dist, map.getOrDefault(dist, 0) + 1);
+        	}
+        }
+        
+        for (int dist : map.keySet()) {
+            if (map.get(dist) > 1) {
+                boomerangs += map.get(dist) * (map.get(dist)-1);
+            }
+        }
+        
+        return boomerangs;
+    }
+	
+    public String reverseStr(String s, int k) {
+        StringBuilder sb = new StringBuilder();
+        int i=0; 
+        while (i < s.length()) {
+            int start = i;
+            int end = i+k-1;
+            if (end >= s.length()) {
+                end = s.length()-1;
+            }
+            reverse(s, start, end, sb);
+            for (int j=end+1; j<=end+k; j++) {
+                if (j < s.length()) {
+                    sb.append(s.charAt(j));
+                } else {
+                    break;
+                }
+            }
+            i = end + k +1;
+        }
+        
+        return sb.toString();
+    }
+    
+    private void reverse(String s, int start, int end, StringBuilder sb) {
+        for (int i=end; i>=start; i--) {
+            sb.append(s.charAt(i));
+        }
+    }
 	
     public List<String> readBinaryWatch(int n) {
         List<String> list = new ArrayList<>();
@@ -1334,6 +1911,35 @@ public String[] findRestaurant(String[] list1, String[] list2) {
 	        root.left = mergeTrees(t1 == null ? null : t1.left, t2 == null ? null : t2.left);
 	        root.right = mergeTrees(t1 == null ? null : t1.right, t2 == null ? null : t2.right);
 	        return root;
+	    }
+	 
+    public int totalHammingDistanceEfficient(int[] nums) {       
+        int hamming = 0;
+        for (int i=0; i<32; i++) {
+            int bitsSet = 0;
+            for (int n : nums) {
+                bitsSet += ((n >>> i) & 1);
+            }
+            hamming += bitsSet*(nums.length - bitsSet);
+        }
+        
+        return hamming;
+    }
+	 
+	 //477. Total Hamming Distance #INEFFICIENT
+	 public int totalHammingDistance(int[] nums) {
+	        int hamming = 0;
+	        for (int i=0; i<nums.length; i++) {
+	            for (int j=i+1; j<nums.length; j++) {
+	                int xor = nums[i] ^ nums[j];
+	                while (xor != 0) {
+	                    hamming += (xor & 1);
+	                    xor = xor >>> 1;
+	                }
+	            }
+	        }
+	        
+	        return hamming;
 	    }
 	
 	// 461 The Hamming distance between two integers is the number of positions at which the corresponding bits are different.
