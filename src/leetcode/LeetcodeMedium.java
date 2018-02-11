@@ -36,8 +36,169 @@ public class LeetcodeMedium {
 		int elements[] = {0,0,0,1,3,5,6,7,8,8};
 		System.out.println(run.findClosestElements(elements, 2, 2));
 		
-
+//		[2,5]
+//				[[3,0,5],[1,2,10]]
+//				[3,2]
+		
+		List<Integer> price = new ArrayList<>();
+		List<Integer> offer1 = new ArrayList<>();
+		List<Integer> offer2 = new ArrayList<>();
+		List<Integer> needs = new ArrayList<>();
+		
+		price.add(2);
+		price.add(5);
+		
+		offer1.add(3);
+		offer1.add(0);
+		offer1.add(5);
+		
+		offer2.add(1);
+		offer2.add(2);
+		offer2.add(10);
+		
+		List<List<Integer>> special = new ArrayList<>();
+		special.add(offer1);
+		special.add(offer2);
+		
+		needs.add(3);
+		needs.add(2);
+		
+		System.out.println(run.shoppingOffers(price, special, needs));
+		
+		int[] dups = {1,3,4,2,1};
+		System.out.println(run.findDuplicate(dups));
+		System.out.println(run.checkValidString( "(*))"));
 	}
+	
+	//678. Valid Parenthesis String
+	  public boolean checkValidString(String s) {
+	        Stack<Character> stack = new Stack<>();
+	        int star = 0;
+	        
+	        for (int i=0; i<s.length(); i++) {
+	            char c = s.charAt(i);
+	            if (c == '(') {
+	                stack.push('(');
+	            } else if (c == ')') {
+	                if (!stack.isEmpty()) {
+	                    stack.pop();
+	                } else if (star > 0) {
+	                    star --;
+	                } else {
+	                    return false;
+	                }
+	            } else {
+	                star ++;
+	            }
+	        }
+	        
+	        return stack.isEmpty();
+	    }
+	
+	//80. Remove Duplicates from Sorted Array II
+	 public int removeDuplicates(int[] nums) {
+	        Map<Integer, Integer> count = new HashMap<>();
+	        
+	        for (int n : nums) {
+	            count.put(n , count.getOrDefault(n, 0) + 1);
+	        }
+	        
+	        int index = 0;
+	        for (int i=0; i<nums.length; ) {
+	            int cnt = count.get(nums[i]);
+	            if (cnt >= 2) {
+	                nums[index++] = nums[i];
+	                nums[index++] = nums[i];
+	            } else {
+	                nums[index++] = nums[i];
+	            }
+	            i += cnt;
+	        }
+	        
+	        return index;
+	    }
+	
+    private Map<Integer, Integer> mapInorder = new HashMap<>();
+    private int pre = 0;
+    
+    // 105. Construct Binary Tree from Preorder and Inorder Traversal
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+    	mapInorder = new HashMap<>();
+        pre = 0;
+        
+        for (int i=0; i<inorder.length; i++) 
+        	mapInorder.put(inorder[i], i);
+        
+        return buildTree(preorder, inorder, 0, inorder.length-1);
+    }
+    
+    //preorder = [3,9,20,15,7]
+    //inorder = [9,3,15,20,7]
+    
+    private TreeNode buildTree(int[] preorder, int[] inorder, int low, int high) {
+        if (low > high)
+            return null;
+        
+        int index = mapInorder.get(preorder[pre++]);
+        
+        TreeNode root = new TreeNode(inorder[index]);
+        root.left = buildTree(preorder, inorder, low, index-1);
+        root.right = buildTree(preorder, inorder, index+1, high);
+        return root;
+    }
+	
+	//287. Find the Duplicate Number
+	 public int findDuplicate(int[] nums) {
+	        int slow = nums[0];
+	        int fast = nums[0];
+	        
+	        do  {
+	            slow = nums[slow];
+	            fast = nums[nums[fast]];
+	        } while (slow != fast);
+	        
+	        
+	        int p1 = nums[0];
+	        int p2 = slow;
+	        
+	        while (p1 != p2) {
+	            p1 = nums[p1];
+	            p2 = nums[p2];
+	        }
+	             
+	        return p1;
+	    }
+	
+    public int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
+        
+        int minCost = 0;
+        
+        for (int i=0; i<needs.size(); i++) 
+                minCost += price.get(i) * needs.get(i);
+        
+        for (int i=0; i<special.size(); i++) {
+            List<Integer> offer = special.get(i);
+            boolean matches = true;
+            
+            List<Integer> needsClone = new ArrayList<>(needs);
+            
+            for (int j=0; j<needsClone.size(); j++) {
+                if (offer.get(j) > needsClone.get(j)) {
+                    matches = false;
+                    break;
+                } else {
+                    needsClone.set(j, needsClone.get(j) - offer.get(j));
+                }
+            }
+            
+            if (matches) {
+                int cost = offer.get(offer.size()-1);
+                minCost = Math.min(minCost, cost + shoppingOffers(price, special, needsClone));
+            }
+        }
+        
+        return minCost;
+    }
 	
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
         List<Integer> list = new ArrayList<>();

@@ -1,6 +1,7 @@
 package zalando;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +43,46 @@ public class Zalando {
 		int A[] = {60, 80, 40 };
 		int B[] = {2, 3, 5};
 		
+		int a = 10000 * 10000;
+		System.out.println("MAX =>" +a);
+		
 		System.out.println(run.countStops(A, B, 2, 200));
+		
+		System.out.println(run.equalOpenClose("(())))("));
+		System.out.println(run.equalOpenClose(")("));
+		System.out.println(run.equalOpenClose("(()))(()()())))"));
+	}
+	
+	public int maxDistance(int a, int b, int c, int d) {
+		int arr[] = {a,b,c,d};
+		Arrays.sort(arr);
+		return (arr[3]-arr[0]) * (arr[3]-arr[0]) +
+				(arr[2]-arr[1]) * (arr[2]-arr[1]);
+	}
+	
+	public int equalOpenClose(String s) {
+		int open = 0, close = 0;
+		int k = 0;
+		
+		for (int i=0; i<s.length(); i++) {
+			char c = s.charAt(i);
+			if (c == '(') {
+				open ++;
+				close --;
+			} else {
+				close ++;
+			}
+			
+			if (close == 0) {
+				k = open;
+			} else if (open == 0) {
+				k = close;
+			} else if (close == open) {
+				k = i-close + 1;
+			}
+		}
+		
+		return k;
 	}
 	
 	public int countStops(int[] weights, int[] floors, int maxAllowed, int maxWeight) {
