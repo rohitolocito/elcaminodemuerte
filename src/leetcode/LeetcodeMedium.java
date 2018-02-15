@@ -68,7 +68,96 @@ public class LeetcodeMedium {
 		int[] dups = {1,3,4,2,1};
 		System.out.println(run.findDuplicate(dups));
 		System.out.println(run.checkValidString( "(*))"));
+		
+		ListNode node = new ListNode(1);
+		System.out.println(98 % 1);
+		System.out.println(run.rotateRight(node, 99));
+		System.out.println(run.uniquePaths(23, 12)); //193536720
+		
 	}
+	
+	public int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        
+        Integer min[][] = new Integer[m][n];
+        min[m-1][n-1] = grid[m-1][n-1];
+        
+        return minPathSum(grid, 0, 0, min);
+    }
+    
+    private int minPathSum(int[][] grid, int r, int c, Integer[][] min) {
+        if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length)
+            return Integer.MAX_VALUE;
+        
+        if (min[r][c] != null)
+            return min[r][c];
+        
+        int down = minPathSum(grid, r+1, c, min);
+        int right = minPathSum(grid, r, c+1, min);
+        min[r][c] = grid[r][c] + Math.min(down, right);
+        return min[r][c];
+    }
+	
+	//62. Unique Paths
+	 public int uniquePaths(int m, int n) {
+		 	int[][] paths = new int[m][n];
+	        return uniquePaths(0, 0, m, n, paths);
+	    }
+	    
+	    private int uniquePaths(int r, int c, int m, int n, int[][] paths) {
+	        
+	        if (r < 0 || r >= m || c < 0 || c >= n)
+	            return 0;
+	        
+	        if (paths[r][c] != 0)
+	        	return paths[r][c];
+	        
+	        if (r == m-1 && c == n-1) {
+	            return 1;
+	        }
+	        
+	        int down = uniquePaths(r+1, c, m, n, paths);
+	        int right = uniquePaths(r, c+1, m, n, paths);
+	        paths[r][c] = down + right;
+	        return paths[r][c];
+	        
+	    }
+	
+	//61. Rotate List
+	public ListNode rotateRight(ListNode head, int k) {
+        if (k <= 0 || head == null)
+            return head;
+        
+        ListNode fast = head;
+        int len = 1;
+        
+        while (k-- != 0) {
+            if (fast.next != null) {
+                fast = fast.next;
+                len ++;
+            } else {
+                k = k%len;
+                fast = head;
+            }
+        }
+        
+        if (fast == head)
+            return head;
+        
+        ListNode slow = head;
+        
+        while (fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        
+        ListNode newHead = slow.next;
+        slow.next = null;
+        fast.next= head;
+        return newHead;
+        
+    }
 	
 	//678. Valid Parenthesis String
 	  public boolean checkValidString(String s) {
