@@ -7,6 +7,104 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    
+    private int segment[] = {};
+    
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        this.segment = new int[size(nums)];
+        constructSegmentTree(nums, 0, 0, nums.length-1);
+        return constructMaximumBinaryTree(nums, 0, nums.length-1);
+    }
+    
+    private TreeNode constructMaximumBinaryTree(int[] nums, int low, int high) {
+        if (low > high)
+            return null;
+        
+        int maxIndex = getMaxIndex(nums, low, high);
+        TreeNode node = new TreeNode(nums[maxIndex]);
+        node.left = constructMaximumBinaryTree(nums, low, maxIndex-1);
+        node.right = constructMaximumBinaryTree(nums, maxIndex+1, high);
+        return node;
+        
+    }
+    
+    private int constructSegmentTree(int[] nums, int index, int low, int high) {
+        if (low > high)
+            return -1;
+        
+        if (low == high) {
+            segment[index] = low;
+            return low;
+        } else {
+            int mid = (low + high) >>> 1;
+            int left = constructSegmentTree(nums, 2*index+1, low, mid);
+            int right = constructSegmentTree(nums, 2*index+2, mid+1, high);
+            int maxIndex = -1;
+            
+            if (left != -1 && right != -1) {
+                maxIndex = nums[left] < nums[right] ? right : left;
+            } else if (left != -1) {
+                maxIndex = left;
+            } else if (right != -1) {
+                maxIndex = right;
+            }
+            
+            segment[index] = maxIndex;
+            return maxIndex;
+        }  
+    }
+    
+    private int getMaxIndex(int nums[], int a, int b) {
+        return getMaxIndexUsingSegmentTree(nums, 0, 0, nums.length-1, a, b);
+    }
+    
+    private int getMaxIndexUsingSegmentTree(int[] nums, int index, int low, int high, int a, int b) {
+        if (low > high)
+            return -1;
+        
+        if (high < a || low > b)//high < a || low > b
+            return -1;
+        
+        if (low >= a && high <= b)
+            return segment[index];
+        
+        int mid = (low + high) >>> 1;
+        
+        int left = getMaxIndexUsingSegmentTree(nums, 2*index+1, low, mid, a, b);
+        int right = getMaxIndexUsingSegmentTree(nums, 2*index+2, mid+1, high, a, b);
+        
+        int maxIndex = -1;
+            
+        if (left != -1 && right != -1) {
+            maxIndex = nums[left] < nums[right] ? right : left;
+        } else if (left != -1) {
+            maxIndex = left;
+        } else if (right != -1) {
+            maxIndex = right;
+        }
+        return maxIndex;
+    }
+    
+    private int size(int nums[]) {
+        int height = (int) Math.ceil(Math.log(nums.length)/Math.log(2));
+        return (int) (2*Math.pow(2, height) - 1);
+    }
+    
+    
+}
+
+
 public class LeetcodeMedium {
 
 	public static void main(String[] args) {
@@ -73,8 +171,99 @@ public class LeetcodeMedium {
 		System.out.println(98 % 1);
 		System.out.println(run.rotateRight(node, 99));
 		System.out.println(run.uniquePaths(23, 12)); //193536720
+		System.out.println(Math.ceil(Math.log(6)/Math.log(2)));
 		
+		Solution solution = new Solution();
+		int nums2[] = {3,2,1,6,0,5};
+		solution.constructMaximumBinaryTree(nums2);
+//		System.out.println(run.canMeasureWater(4, 6, 8));
 	}
+	
+    private class Range {
+        int a;
+        int b;
+        
+        public Range(int a, int b) {
+            this.a = a;
+            this.b = b;
+        }
+    }
+    
+    public List<Integer> partitionLabels(String S) {
+        
+        List<Integer> list = new ArrayList<>();
+        
+        if (S == null || S.isEmpty())
+            return list;
+        
+        Map<Character, Range> map = new HashMap<>(); 
+        
+        for (int i=0; i<S.length(); i++) {
+            char c = S.charAt(i);
+            
+            if (map.containsKey(c)) {
+                Range r = map.get(c);
+                r.b = i;
+            } else {
+                map.put(c, new Range(i,i));
+            }
+        }
+        
+        Range range = null;
+        
+        for (int i=0; i<S.length(); i++) {
+            
+            char c = S.charAt(i);
+            if (range == null) {
+                range = map.get(c);
+            } else {
+                Range r = map.get(c);
+                if (r.a >= range.a && r.b <= range.b) {
+                    continue;
+                } else if (r.a > range.b) {
+                    list.add(range.b - range.a + 1);
+                    range = r;
+                } else if (r.b > range.b) {
+                    range.b = r.b;
+                }
+            }
+            
+            
+        }
+        
+        list.add(range.b - range.a + 1);
+        return list;
+        
+    }
+	
+    // BUGGY & INCORRECT
+//    public boolean canMeasureWater(int x, int y, int z) {
+//        
+//        if (x == 0)
+//            return y == z;
+//        if (y == 0)
+//            return x == z;
+//        
+//        int min = Math.min(x,y);
+//        int max = Math.max(x,y);
+//        
+//        if (min + max == z)
+//            return true;
+//        
+//        int a =min , b= 0;
+//        
+//        while (a + b < z) {
+//            b = b + a;
+//            if (b > max) {
+//                a = b - max;   
+//                b = 0;
+//            }
+//            if (b == z)
+//                return true;
+//        }
+//        
+//        return false;
+//    }
 	
 	public int minPathSum(int[][] grid) {
         int m = grid.length;
