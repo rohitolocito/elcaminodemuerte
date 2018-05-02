@@ -189,6 +189,43 @@ public class RoughWork {
 		System.out.println(Integer.MAX_VALUE + 292929);
 		
 		System.out.println(Integer.toHexString(-1));
+		
+		System.out.println("abcdefghijklmno" == new String("abcdefghijklmno"));
+		
+		String a1 = "abcdefghijklmno";
+		String a2 = "abcdefghijklmno";
+		System.out.println(("abcdefghijklmno" == "abcdefghijklmno") +" : " + (a1 == a2));
+		
+		String s = new String();
+		s.trim();
+		Integer a = 128;
+		Integer b = a + 0;
+		
+		System.out.println( (a == b) + "" + (a.equals(b)));
+	}
+	
+	private class X {
+		
+		private int x;
+		private int y;
+		public int getX() {
+			return x;
+		}
+		public void setX(int x) {
+			this.x = x;
+		}
+		public int getY() {
+			return y;
+		}
+		public void setY(int y) {
+			this.y = y;
+		} 
+		
+		@Override
+		public boolean equals(Object obj) {
+			// TODO Auto-generated method stub
+			return super.equals(obj);
+		}
 	}
 	
 	public static Node interweaveLists(Node node1, Node node2) {

@@ -21,7 +21,7 @@ public class MyHashMap<K, V> {
 		}
 	}
 	
-	private static final float DEFAULT_LOAD_factor = 0.75f;
+	private static final float DEFAULT_LOAD_FACTOR = 0.75f;
 	
 	private static final int DEFAULT_CAPACITY = 16;
 	
@@ -31,7 +31,7 @@ public class MyHashMap<K, V> {
 	
 	private int size = 0;
 	
-	private float loadfactor = DEFAULT_LOAD_factor;
+	private float loadfactor = DEFAULT_LOAD_FACTOR;
 	
 	public MyHashMap(int initialCapacity, float loadfactor) {
 		if(initialCapacity <= 0) 
@@ -48,11 +48,11 @@ public class MyHashMap<K, V> {
 	}
 	
 	public MyHashMap(int initialCapacity) {
-		this(initialCapacity, DEFAULT_LOAD_factor);
+		this(initialCapacity, DEFAULT_LOAD_FACTOR);
 	}
 	
 	public MyHashMap() {
-		this(DEFAULT_CAPACITY, DEFAULT_LOAD_factor);
+		this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
 	}
 	
 	public V put(K key, V value) {

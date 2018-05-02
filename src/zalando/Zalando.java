@@ -51,6 +51,31 @@ public class Zalando {
 		System.out.println(run.equalOpenClose("(())))("));
 		System.out.println(run.equalOpenClose(")("));
 		System.out.println(run.equalOpenClose("(()))(()()())))"));
+		
+		System.out.println(run.eqOpenClose("(())))("));
+		System.out.println(run.eqOpenClose(")("));
+		System.out.println(run.eqOpenClose("(()))(() ()())))"));
+		System.out.println(run.eqOpenClose("))"));
+	}
+	
+	// CORRECT SOLUTION
+	public int eqOpenClose(String s) {
+		int close = 0;
+		for (int i=0; i<s.length(); i++) 
+			if (s.charAt(i) == ')')
+				close++;
+		
+		int open = 0;
+		for (int i=0; i<s.length(); i++) {
+			if (s.charAt(i) == '(')
+				open++;
+			else
+				close--;
+			if (open == close)
+				return i+1;
+		}
+		
+		return close;
 	}
 	
 	public int maxDistance(int a, int b, int c, int d) {
@@ -89,21 +114,21 @@ public class Zalando {
 		int weight = 0;	
 		int stops = 0;
 		int numOfPeople = 0;
-		Set<Integer> set = new HashSet<>();
+		Set<Integer> uniqueStops = new HashSet<>();
 		
 		for (int i=0; i<weights.length; i++) {
 			if (weight + weights[i] > maxWeight || numOfPeople > maxAllowed) {
-				stops += set.size() + 1;
-				set.clear();
+				stops += uniqueStops.size() + 1;
+				uniqueStops.clear();
 				weight = 0;
 				numOfPeople = 0;
 			}
 			numOfPeople++;
 			weight += weights[i];
-			set.add(floors[i]);
+			uniqueStops.add(floors[i]);
 		}
 		
-		stops += set.size() == 0 ? 0 : set.size()+1;
+		stops += uniqueStops.size() == 0 ? 0 : uniqueStops.size()+1;
 		
 		return stops;
 	}
